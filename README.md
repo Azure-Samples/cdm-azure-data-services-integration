@@ -11,22 +11,27 @@ The tutorial walks through how to integrate CDM folders in a modern data warehou
 - Creating, training and publishing an Azure Machine Learning model using data in the CDM folder for training the model.
 - Loading data from the CDM folder into staging tables in Azure SQL Data Warehouse and then transforming the data into a dimensional model. 
 
+The samples included with the tutorial include sample libraries and other sample components that you can use with CDM folders you create with your own data.
+
+IMPORTANT: all sample code is provided as-is with no warranties and is intended for learning purposes only.
+
 ## Getting Started
 
-Download the project and open the tutorial guide in the Documentation folder.  Follow the getting started and instalation instructions in the guide, and then walkthrough the tutorial. 
+Download the project and open the tutorial guide in the Documentation folder.  Follow the getting started and instalation instructions in the guide, and then walk through the tutorial. 
 
-The tutorial is divided in sections, one for each Azure Data Service.  Each section incudes instructions for installing and exporing the samples for that service. The Azure Data Factory section includes instructions for orchestrating Azure Databricks, Azure Machine Learning and Azure SQL Data Warehouse.    
+The tutorial is divided into sections, one for each Azure Data Service.  Each section incudes instructions for deploying and exploring the samples for that service. The Azure Data Factory section includes instructions for orchestrating Azure Databricks, Azure Machine Learning and Azure SQL Data Warehouse.    
 
-You can explore each section and Data Service in isolation, or for the full expereince, walk through the tutorial from beginning to end, including operationalizang the flow with Aure Data Factory.  
+For the full experienceyou should walk through the tutorial from beginning to end, including operationalizang the flow with Aure Data Factory. You can also explore sections covering each Data Service independently.   
 
 ### Prerequisites
-
+You must have the following to go through the tutorial: 
 - A Power BI Pro or Premium account
 - An Azure subscription
+- Familiarity with the Azure portal 
 
-It is recommended that you install the following before you start
-- Latest version of SSMS or Azure Data Studio for working with Azure SQL Data Warehouse
-- Azure Storage Explorer with support for Azure Data Lake Storage Gen 2
+It is recommended that you install the following before you start:
+- Azure Storage Explorer with support for Azure Data Lake Storage Gen 2, used to browse and manage CDM folders in ADLS Gen2
+- Latest version of SSMS or Azure Data Studio, used for working with Azure SQL Data Warehouse
 
 ### Installation
 
