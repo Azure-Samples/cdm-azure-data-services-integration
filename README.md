@@ -8,9 +8,8 @@ The tutorial walks through how to integrate CDM folders in a modern data warehou
 - Configuring your Power BI account to save Power BI Dataflows to Azure Data Lake Storage Gen2  
 - Creating a Power BI Dataflow based on the World Wide Importers database and saving the dataflow as a CDM folder in ADLS Gen2
 - Creating an Azure Databricks notebook that processes the CDM folder to prepare and cleanse the data.  The updated data is written to a new CDM folder.
-- Creating and training an Azure Machine learning model using the data in the CDM folder.
-- Loading data from the CDM folder into staging tables in Azure SQL Data Warehouse.
-- Transforming the data in the data warehouse from the staging tables into a dimensional model containing facts and dimensions. 
+- Creating, training and publishing an Azure Machine Learning model using data in the CDM folder for training the model.
+- Loading data from the CDM folder into staging tables in Azure SQL Data Warehouse and then transforming the data into a dimensional model. 
 
 ## Getting Started
 
@@ -22,10 +21,10 @@ You can explore each section and Data Service in isolation, or for the full expe
 
 ### Prerequisites
 
-A Power BI Pro or Premium account
-An Azure subscription
+- A Power BI Pro or Premium account
+- An Azure subscription
 
-It is recommended that you have installed the following before you start
+It is recommended that you install the following before you start
 - Latest version of SSMS or Azure Data Studio for working with Azure SQL Data Warehouse
 - Azure Storage Explorer with support for Azure Data Lake Storage Gen 2
 
