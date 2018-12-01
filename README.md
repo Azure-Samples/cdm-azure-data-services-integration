@@ -12,29 +12,18 @@ The tutorial walks through use of CDM folders in a modern data warehouse scenari
 - Use an Azure Data Factory pipeline to Load data from the CDM folder into staging tables in Azure SQL Data Warehouse and then invoke stored procedures that transform the data into a dimensional model.
 - using Azure Data Factory to orchestrate the overall process so that it runs on a schedule and monitor execution.
 
-In each task you leverage the the metadata in the CDM folder that describes the data it contains.  
+Each step leverages the metadata contained in the CDM folder to make it easier and simpler to accomplish the task.  
 
-The samples include libraries, code and Azure resource templates that you can use with CDM folders that you create from your own data.
+The samples include libraries, code, and Azure resource templates that you can use with with CDM folders that you create from your own data.
 
-IMPORTANT: all sample code is provided as-is with no warranties and is intended for learning purposes only.
+IMPORTANT: the sample code is provided as-is with no warranties and is intended for learning purposes only.
 
 ## Getting Started
 
-Download the project and open the tutorial in the documentation folder.
-
-
-The tutorial is divided into sections, one for each Azure Data Service.  Each section includes instructions for deploying and exploring the samples for that service. The Azure Data Factory section includes instructions for orchestrating Azure Databricks, Azure Machine Learning and Azure SQL Data Warehouse.    
-
-For the full experience, you should walk through the tutorial from beginning to end, including operationalizing the flow with Aure Data Factory. You can also explore sections covering each Data Service independently.   
+Download the project and open the tutorial in the documentation folder.  
 
 ### Prerequisites
-You must have the following to go through the tutorial: 
-- A Power BI Pro or Premium account
-- An Azure subscription
-
-It is also recommended that you install:
-- Azure Storage Explorer with support for Azure Data Lake Storage Gen 2, used to browse and manage CDM folders in ADLS Gen2
-- Latest version of SQL Server Management Studio (SSMS) or Azure Data Studio, used to browse the SQL database and SQL data warehouse
+See the tutorial for details.
 
 ### Installation
 See the tutorial for detailed installation instructions.
