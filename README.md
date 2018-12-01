@@ -4,22 +4,26 @@ Tutorial and sample code for integrating and working with CDM folders in Azure D
 
 ## Features
 
-The tutorial walks through use of CDM folders in a modern data warehouse scenario, including:
-- Configuring your Power BI account to save Power BI Dataflows as CDM folders in Azure Data Lake Storage Gen2  
-- Creating a Power BI Dataflow based on the World Wide Importers sample database and saving the dataflow as a CDM folder
-- Creating an Azure Databricks notebook that processes the CDM folder to prepare and cleanse the data. The updated data is written to a new CDM folder.
-- Creating, training and publishing an Azure Machine Learning model using data in the CDM folder for training the model.
-- Loading data from the CDM folder into staging tables in Azure SQL Data Warehouse and transforming the data into a dimensional model. 
+The tutorial walks through use of CDM folders in a modern data warehouse scenario.  In it you will:
+- Configure your Power BI account to save Power BI Dataflows as CDM folders in Azure Data Lake Storage Gen2;  
+- Create a Power BI Dataflow by ingesting order data from the World Wide Importers sample database and save it as a CDM folder;
+- Use an Azure Databricks notebook that prepares and cleanses the data in the CDM folder for later analytics processing, and then write the updated data to a new CDM folder in the data lake;
+- Use Azure Machine Learning to train and publish a model using data from the CDM folder.
+- Use an Azure Data Factory pipeline to Load data from the CDM folder into staging tables in Azure SQL Data Warehouse and then invoke stored procedures that transform the data into a dimensional model.
+- using Azure Data Factory to orchestrate the overall process so that it runs on a schedule and monitor execution.
 
-The samples include libraries, code and other components that you can use with CDM folders you create from your own data.
+In each task you leverage the the metadata in the CDM folder that describes the data it contains.  
+
+The samples include libraries, code and Azure resource templates that you can use with CDM folders that you create from your own data.
 
 IMPORTANT: all sample code is provided as-is with no warranties and is intended for learning purposes only.
 
 ## Getting Started
 
-Download the project and open the tutorial in the documentation folder. 
+Download the project and open the tutorial in the documentation folder.
 
-The tutorial is divided into sections, one for each Azure Data Service.  Each section incudes instructions for deploying and exploring the samples for that service. The Azure Data Factory section includes instructions for orchestrating Azure Databricks, Azure Machine Learning and Azure SQL Data Warehouse.    
+
+The tutorial is divided into sections, one for each Azure Data Service.  Each section includes instructions for deploying and exploring the samples for that service. The Azure Data Factory section includes instructions for orchestrating Azure Databricks, Azure Machine Learning and Azure SQL Data Warehouse.    
 
 For the full experience, you should walk through the tutorial from beginning to end, including operationalizing the flow with Aure Data Factory. You can also explore sections covering each Data Service independently.   
 
