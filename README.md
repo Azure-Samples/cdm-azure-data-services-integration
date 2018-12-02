@@ -1,52 +1,30 @@
 # CDM Azure Data Services Integration
 
-Tutorial and sample code for integrating and working with CDM folders in Azure Data Services applications.
+Tutorial and sample code for integrating Power BI Dataflows and Azure Data Services using CDM folders in Azure Data Lake Storage Gen 2.
 
 ## Features
 
-The tutorial walks through how to integrate CDM folders in a modern data warehouse scenario, including:
-- Configuring your Power BI account to save Power BI Dataflows to Azure Data Lake Storage Gen2  
-- Creating a Power BI Dataflow based on the World Wide Importers database and saving the dataflow as a CDM folder in ADLS Gen2
-- Creating an Azure Databricks notebook that processes the CDM folder to prepare and cleanse the data.  The updated data is written to a new CDM folder.
-- Creating, training and publishing an Azure Machine Learning model using data in the CDM folder for training the model.
-- Loading data from the CDM folder into staging tables in Azure SQL Data Warehouse and then transforming the data into a dimensional model. 
+The tutorial walks through use of CDM folders in a modern data warehouse scenario.  In it you will:
+- Configure your Power BI account to save Power BI Dataflows as CDM folders in Azure Data Lake Storage Gen 2;  
+- Create a Power BI dataflow by ingesting order data from the Wide World Importers sample database and save it as a CDM folder;
+- Use an Azure Databricks notebook that prepares and cleanses the data in the CDM folder, and then writes the updated data to a new CDM folder in the data lake;
+- Use Azure Machine Learning to train and publish a model using data from the CDM folder.
+- Use an Azure Data Factory pipeline to Load data from the CDM folder into staging tables in Azure SQL Data Warehouse and then invoke stored procedures that transform the data into a dimensional model.
+- using Azure Data Factory to orchestrate the overall process so that it runs on a schedule and monitor execution.
 
-The samples included with the tutorial include sample libraries and other sample components that you can use with CDM folders you create with your own data.
+Each step leverages the metadata contained in the CDM folder to make it easier and simpler to accomplish the task.  
 
-IMPORTANT: all sample code is provided as-is with no warranties and is intended for learning purposes only.
+The samples include libraries, code, and Azure resource templates that you can use with with CDM folders that you create from your own data.
+
+IMPORTANT: the sample code is provided as-is with no warranties and is intended for learning purposes only.
 
 ## Getting Started
 
-Download the project and open the tutorial guide in the Documentation folder.  Follow the getting started and instalation instructions in the guide, and then walk through the tutorial. 
-
-The tutorial is divided into sections, one for each Azure Data Service.  Each section incudes instructions for deploying and exploring the samples for that service. The Azure Data Factory section includes instructions for orchestrating Azure Databricks, Azure Machine Learning and Azure SQL Data Warehouse.    
-
-For the full experienceyou should walk through the tutorial from beginning to end, including operationalizang the flow with Aure Data Factory. You can also explore sections covering each Data Service independently.   
+Download the project and open the tutorial in the documentation folder.  
 
 ### Prerequisites
-You must have the following to go through the tutorial: 
-- A Power BI Pro or Premium account
-- An Azure subscription
-- Familiarity with the Azure portal 
-
-It is recommended that you install the following before you start:
-- Azure Storage Explorer with support for Azure Data Lake Storage Gen 2, used to browse and manage CDM folders in ADLS Gen2
-- Latest version of SSMS or Azure Data Studio, used for working with Azure SQL Data Warehouse
+See the tutorial for details.
 
 ### Installation
+See the tutorial for detailed installation instructions.
 
-
-### Quickstart
-(Add steps to get up and running quickly)
-
-1. git clone [repository clone url]
-2. cd [respository name]
-3. ...
-
-## Resources
-
-(Any additional resources or related projects)
-
-- Link to supporting information
-- Link to similar sample
-- ...
