@@ -1,5 +1,4 @@
 # Databricks notebook source
-dbutils.widgets.removeAll()
 dbutils.widgets.text("inputCDMFolderLocation", "https://cdsabyosadev01dxt.dfs.core.windows.net/powerbi/WideWorldImporters-1/WideWorldImporters-Orders/model.json", "InputCDMFolderLocation")
 dbutils.widgets.text("outputCDMFolderLocation", "https://cdsabyosadev01dxt.dfs.core.windows.net/powerbi/MatthewTest/wideworldimportersdemo","OutputCDMFolderLocation")
 inputLocation = dbutils.widgets.get("inputCDMFolderLocation")
