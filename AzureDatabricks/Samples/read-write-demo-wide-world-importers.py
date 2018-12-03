@@ -186,16 +186,6 @@ display(hashedSalesCustomerDf)
 
 # COMMAND ----------
 
-from pyspark.sql.functions import md5
-
-hashedSalesCustomerDf = newSalesCustomerDf.withColumn("ChangeTrackingHash", hash_function_udf(newSalesCustomerDf.BuyingGroupID, newSalesCustomerDf.CustomerID))
-
-# COMMAND ----------
-
-display(hashedSalesCustomerDf)
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC 
 # MAGIC # Exclude corporate customers
