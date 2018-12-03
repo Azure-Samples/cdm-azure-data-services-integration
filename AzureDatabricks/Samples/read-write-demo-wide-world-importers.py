@@ -21,75 +21,23 @@ if outputLocation == '':
    outputLocation = "https://cdsabyosadev01dxt.dfs.core.windows.net/powerbi/PremalTest/wideworldimportersdemo"
 
 # Parameters to authenticate to ADLS Gen 2
-appID = "bd8e91da-c58c-4407-95e0-a8ecad012fc7"
-appKey = "Lky5pTg2teniHdbeTlmOuivjdIPBPcwMQJ49wGwKiXA="
-tenantID = "72f988bf-86f1-41af-91ab-2d7cd011db47"
+appID = dbutils.secrets.get(scope = "CDMSampleScope", key = "appID")
+appKey = dbutils.secrets.get(scope = "CDMSampleScope", key = "appKey")
+tenantID = dbutils.secrets.get(scope = "CDMSampleScope", key = "tenantID")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC 
+# MAGIC # Summary of the contents
+# MAGIC 
+# MAGIC ### This notebook reads in a set of entities from CDM folders, does transformations on a subset of the entities and then writes out all the entities including the modified ones to a new CDM folder
 
 # COMMAND ----------
 
 salesOrderDf = (spark.read.format("com.microsoft.cdm")
-                     .option("cdmModel", inputLocation)
-                     .option("entity", "Sales Orders")
-                     .option("appId", appID)
-                     .option("appKey", appKey)
-                     .option("tenantId", tenantID)
-                     .load())
-
-# COMMAND ----------
-
-salesOrderLinesDf = (spark.read.format("com.microsoft.cdm")
-                     .option("cdmModel", inputLocation)
-                     .option("entity", "Sales OrderLines")
-                     .option("appId", appID)
-                     .option("appKey", appKey)
-                     .option("tenantId", tenantID)
-                     .load())
-
-# COMMAND ----------
-
-salesCustomerDf = (spark.read.format("com.microsoft.cdm")
-                     .option("cdmModel", inputLocation)
-                     .option("entity", "Sales Customers")
-                     .option("appId", appID)
-                     .option("appKey", appKey)
-                     .option("tenantId", tenantID)
-                     .load())
-
-# COMMAND ----------
-
-salesCustomerCategoriesDf = (spark.read.format("com.microsoft.cdm")
-                     .option("cdmModel", inputLocation)
-                     .option("entity", "Sales CustomerCategories")
-                     .option("appId", appID)
-                     .option("appKey", appKey)
-                     .option("tenantId", tenantID)
-                     .load())
-
-# COMMAND ----------
-
-salesBuyingGroupsDf = (spark.read.format("com.microsoft.cdm")
-                     .option("cdmModel", inputLocation)
-                     .option("entity", "Sales BuyingGroups")
-                     .option("appId", appID)
-                     .option("appKey", appKey)
-                     .option("tenantId", tenantID)
-                     .load())
-
-# COMMAND ----------
-
-warehouseStockItemsDf = (spark.read.format("com.microsoft.cdm")
-                              .option("cdmModel", inputLocation)
-                              .option("entity", "Warehouse StockItems")
-                              .option("appId", appID)
-                              .option("appKey", appKey)
-                              .option("tenantId", tenantID)
-                              .load())
-
-# COMMAND ----------
-
-warehouseColorsDf = (spark.read.format("com.microsoft.cdm")
                           .option("cdmModel", inputLocation)
-                          .option("entity", "Warehouse Colors")
+                          .option("entity", "Sales Orders")
                           .option("appId", appID)
                           .option("appKey", appKey)
                           .option("tenantId", tenantID)
@@ -97,23 +45,79 @@ warehouseColorsDf = (spark.read.format("com.microsoft.cdm")
 
 # COMMAND ----------
 
+salesOrderLinesDf = (spark.read.format("com.microsoft.cdm")
+                               .option("cdmModel", inputLocation)
+                               .option("entity", "Sales OrderLines")
+                               .option("appId", appID)
+                               .option("appKey", appKey)
+                               .option("tenantId", tenantID)
+                               .load())
+
+# COMMAND ----------
+
+salesCustomerDf = (spark.read.format("com.microsoft.cdm")
+                        .option("cdmModel", inputLocation)
+                        .option("entity", "Sales Customers")
+                        .option("appId", appID)
+                        .option("appKey", appKey)
+                        .option("tenantId", tenantID)
+                        .load())
+
+# COMMAND ----------
+
+salesCustomerCategoriesDf = (spark.read.format("com.microsoft.cdm")
+                                       .option("cdmModel", inputLocation)
+                                       .option("entity", "Sales CustomerCategories")
+                                       .option("appId", appID)
+                                       .option("appKey", appKey)
+                                       .option("tenantId", tenantID)
+                                       .load())
+
+# COMMAND ----------
+
+salesBuyingGroupsDf = (spark.read.format("com.microsoft.cdm")
+                                 .option("cdmModel", inputLocation)
+                                 .option("entity", "Sales BuyingGroups")
+                                 .option("appId", appID)
+                                 .option("appKey", appKey)
+                                 .option("tenantId", tenantID)
+                                 .load())
+
+# COMMAND ----------
+
+warehouseStockItemsDf = (spark.read.format("com.microsoft.cdm")
+                                   .option("cdmModel", inputLocation)
+                                   .option("entity", "Warehouse StockItems")
+                                   .option("appId", appID)
+                                   .option("appKey", appKey)
+                                   .option("tenantId", tenantID)
+                                   .load())
+
+# COMMAND ----------
+
+warehouseColorsDf = (spark.read.format("com.microsoft.cdm")
+                               .option("cdmModel", inputLocation)
+                               .option("entity", "Warehouse Colors")
+                               .option("appId", appID)
+                               .option("appKey", appKey)
+                               .option("tenantId", tenantID)
+                               .load())
+
+# COMMAND ----------
+
 warehousePackageTypesDf = (spark.read.format("com.microsoft.cdm")
-                                .option("cdmModel", inputLocation)
-                                .option("entity", "Warehouse PackageTypes")
-                                .option("appId", appID)
-                                .option("appKey", appKey)
-                                .option("tenantId", tenantID)
-                                .load())
+                                     .option("cdmModel", inputLocation)
+                                     .option("entity", "Warehouse PackageTypes")
+                                     .option("appId", appID)
+                                     .option("appKey", appKey)
+                                     .option("tenantId", tenantID)
+                                     .load())
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC 
 # MAGIC # Populate the buying group entity with unassigned
-
-# COMMAND ----------
-
-salesBuyingGroupsDf.printSchema()
 
 # COMMAND ----------
 
@@ -129,10 +133,6 @@ unassignedBuyingGroupDf = spark.sql("select -1, 'Unassigned', 0, to_date('2013-0
 newSalesBuyingGroupsDf = salesBuyingGroupsDf.union(unassignedBuyingGroupDf)
 
 display(newSalesBuyingGroupsDf)
-
-# COMMAND ----------
-
-newSalesBuyingGroupsDf.printSchema()
 
 # COMMAND ----------
 
@@ -204,15 +204,6 @@ corporateSalesCustomerDf = spark.sql("select * from hashedSalesCustomer c, sales
 
 # COMMAND ----------
 
-display(corporateSalesCustomerDf)
-print(corporateSalesCustomerDf.count())
-
-# COMMAND ----------
-
-corporateSalesCustomerDf.count()
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC 
 # MAGIC # Write out all the entities
@@ -225,89 +216,87 @@ cdmModelName = "Transformed-Wide-World-Importers"
 # COMMAND ----------
 
 (salesOrderDf.write.format("com.microsoft.cdm")
-             .option("entity", "Sales Orders")
-             .option("appId", appID)
-             .option("appKey", appKey)
-             .option("tenantId", tenantID)
-             .option("cdmFolder", outputLocation)
-             .option("cdmModelName", cdmModelName)
-             .save())
+                   .option("entity", "Sales Orders")
+                   .option("appId", appID)
+                   .option("appKey", appKey)
+                   .option("tenantId", tenantID)
+                   .option("cdmFolder", outputLocation)
+                   .option("cdmModelName", cdmModelName)
+                   .save())
 
 # COMMAND ----------
 
 (salesOrderLinesDf.write.format("com.microsoft.cdm")
-             .option("entity", "Sales OrderLines")
-             .option("appId", appID)
-             .option("appKey", appKey)
-             .option("tenantId", tenantID)
-             .option("cdmFolder", outputLocation)
-             .option("cdmModelName", cdmModelName)
-             .save())
+                        .option("entity", "Sales OrderLines")
+                        .option("appId", appID)
+                        .option("appKey", appKey)
+                        .option("tenantId", tenantID)
+                        .option("cdmFolder", outputLocation)
+                        .option("cdmModelName", cdmModelName)
+                        .save())
 
 # COMMAND ----------
 
 (corporateSalesCustomerDf.write.format("com.microsoft.cdm")
-             .option("entity", "Corporate Sales Customers")
-             .option("appId", appID)
-             .option("appKey", appKey)
-             .option("tenantId", tenantID)
-             .option("cdmFolder", outputLocation)
-             .option("cdmModelName", cdmModelName)
-             .save())
-
-corporateSalesCustomerDf.count()
+                               .option("entity", "Corporate Sales Customers")
+                               .option("appId", appID)
+                               .option("appKey", appKey)
+                               .option("tenantId", tenantID)
+                               .option("cdmFolder", outputLocation)
+                               .option("cdmModelName", cdmModelName)
+                               .save())
 
 # COMMAND ----------
 
 (salesCustomerCategoriesDf.write.format("com.microsoft.cdm")
-             .option("entity", "Sales CustomerCategories")
-             .option("appId", appID)
-             .option("appKey", appKey)
-             .option("tenantId", tenantID)
-             .option("cdmFolder", outputLocation)
-             .option("cdmModelName", cdmModelName)
-             .save())
+                                .option("entity", "Sales CustomerCategories")
+                                .option("appId", appID)
+                                .option("appKey", appKey)
+                                .option("tenantId", tenantID)
+                                .option("cdmFolder", outputLocation)
+                                .option("cdmModelName", cdmModelName)
+                                .save())
 
 # COMMAND ----------
 
 (newSalesBuyingGroupsDf.write.format("com.microsoft.cdm")
-             .option("entity", "Sales BuyingGroups")
-             .option("appId", appID)
-             .option("appKey", appKey)
-             .option("tenantId", tenantID)
-             .option("cdmFolder", outputLocation)
-             .option("cdmModelName", cdmModelName)
-             .save())
+                             .option("entity", "Sales BuyingGroups")
+                             .option("appId", appID)
+                             .option("appKey", appKey)
+                             .option("tenantId", tenantID)
+                             .option("cdmFolder", outputLocation)
+                             .option("cdmModelName", cdmModelName)
+                             .save())
 
 # COMMAND ----------
 
 (warehouseStockItemsDf.write.format("com.microsoft.cdm")
-             .option("entity", "Warehouse StockItems")
-             .option("appId", appID)
-             .option("appKey", appKey)
-             .option("tenantId", tenantID)
-             .option("cdmFolder", outputLocation)
-             .option("cdmModelName", cdmModelName)
-             .save())
+                            .option("entity", "Warehouse StockItems")
+                            .option("appId", appID)
+                            .option("appKey", appKey)
+                            .option("tenantId", tenantID)
+                            .option("cdmFolder", outputLocation)
+                            .option("cdmModelName", cdmModelName)
+                            .save())
 
 # COMMAND ----------
 
 (warehouseColorsDf.write.format("com.microsoft.cdm")
-             .option("entity", "Warehouse Colors")
-             .option("appId", appID)
-             .option("appKey", appKey)
-             .option("tenantId", tenantID)
-             .option("cdmFolder", outputLocation)
-             .option("cdmModelName", cdmModelName)
-             .save())
+                        .option("entity", "Warehouse Colors")
+                        .option("appId", appID)
+                        .option("appKey", appKey)
+                        .option("tenantId", tenantID)
+                        .option("cdmFolder", outputLocation)
+                        .option("cdmModelName", cdmModelName)
+                        .save())
 
 # COMMAND ----------
 
 (warehousePackageTypesDf.write.format("com.microsoft.cdm")
-             .option("entity", "Warehouse PackageTypes")
-             .option("appId", appID)
-             .option("appKey", appKey)
-             .option("tenantId", tenantID)
-             .option("cdmFolder", outputLocation)
-             .option("cdmModelName", cdmModelName)
-             .save())
+                              .option("entity", "Warehouse PackageTypes")
+                              .option("appId", appID)
+                              .option("appKey", appKey)
+                              .option("tenantId", tenantID)
+                              .option("cdmFolder", outputLocation)
+                              .option("cdmModelName", cdmModelName)
+                              .save())
