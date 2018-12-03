@@ -1,0 +1,780 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "factoryName": {
+            "type": "string",
+            "metadata": "Data Factory Name",
+            "defaultValue": "adfcdmdemo"
+        },
+        "CDMParserUrl": {
+            "type": "string"
+        },
+        "ADLSGen2_accountKey": {
+            "type": "secureString",
+            "metadata": "Secure string for 'accountKey' of 'ADLSGen2'"
+        },
+        "AzureStorage_connectionString": {
+            "type": "secureString",
+            "metadata": "Secure string for 'connectionString' of 'AzureStorage'"
+        },
+        "AzureSqlDW_connectionString": {
+            "type": "secureString",
+            "metadata": "Secure string for 'connectionString' of 'AzureSqlDW'"
+        },
+        "ADLSGen2_properties_typeProperties_url": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+    },
+    "resources": [
+        {
+            "name": "[concat(parameters('factoryName'), '/MountCDM')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "description": "Load Model File",
+                "activities": [
+                    {
+                        "name": "LoadModel",
+                        "type": "Lookup",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "AzureBlobFSSource",
+                                "recursive": true
+                            },
+                            "dataset": {
+                                "referenceName": "ADLSGen2ModelFile",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "Folder": {
+                                        "value": "@pipeline().parameters.CDMFolder",
+                                        "type": "Expression"
+                                    },
+                                    "File": {
+                                        "value": "@pipeline().parameters.ModelFile",
+                                        "type": "Expression"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "Parse",
+                        "type": "WebActivity",
+                        "dependsOn": [
+                            {
+                                "activity": "LoadModel",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "url": "[parameters('CDMParserUrl')]",
+                            "method": "POST",
+                            "headers": {},
+                            "body": {
+                                "model": "@activity('LoadModel').output.firstRow",
+                                "dataTypeMap": "@pipeline().parameters.DataTypeMap"
+                            }
+                        }
+                    },
+                    {
+                        "name": "PrepDestination",
+                        "type": "Lookup",
+                        "dependsOn": [
+                            {
+                                "activity": "Parse",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "SqlDWSource",
+                                "sqlReaderQuery": "IF NOT EXISTS (SELECT * FROM sysobjects WHERE id = object_id(N'[dbo].[ExecuteQuery]') AND OBJECTPROPERTY(id, N'IsProcedure') = 1) BEGIN EXEC ('CREATE PROC [dbo].[ExecuteQuery] @query [nvarchar](max) AS EXEC (@query)'); SELECT 1; END ELSE SELECT 2; IF NOT EXISTS (SELECT * FROM sysobjects WHERE id = object_id(N'[dbo].[ADFCDSACopyTracker]') AND OBJECTPROPERTY(id, N'IsTable') = 1) BEGIN EXEC ('CREATE TABLE  [dbo].[ADFCDSACopyTracker] ( [Id] [int] IDENTITY(1,1) NOT NULL, [EntityName] [nvarchar](200) NULL, [PartionLocation] [nvarchar](500) NULL, [RunId] [nvarchar](200) NULL, [RefreshTime] [nvarchar](200) NULL, [ModifiedTime] [nvarchar](200) NULL)'); SELECT 3; END ELSE SELECT 4;"
+                            },
+                            "dataset": {
+                                "referenceName": "AzureSqlDWTable",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "TableName": "DummyTable",
+                                    "TableSchema": []
+                                }
+                            },
+                            "firstRowOnly": false
+                        }
+                    },
+                    {
+                        "name": "FilterByInclusionExclusion",
+                        "type": "Filter",
+                        "dependsOn": [
+                            {
+                                "activity": "Parse",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "items": {
+                                "value": "@activity('Parse').output.result",
+                                "type": "Expression"
+                            },
+                            "condition": {
+                                "value": "@and(or(empty(pipeline().parameters.EntitiesInclusionMap),contains(pipeline().parameters.EntitiesInclusionMap, item().Name)),or(empty(pipeline().parameters.EntitiesInclusionMap),not(contains(pipeline().parameters.EntitiesExclusionMap, item().Name))))",
+                                "type": "Expression"
+                            }
+                        }
+                    },
+                    {
+                        "name": "ForEachEntity",
+                        "type": "ForEach",
+                        "dependsOn": [
+                            {
+                                "activity": "PrepDestination",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            },
+                            {
+                                "activity": "FilterByInclusionExclusion",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "items": {
+                                "value": "@activity('FilterByInclusionExclusion').output.value",
+                                "type": "Expression"
+                            },
+                            "isSequential": true,
+                            "activities": [
+                                {
+                                    "name": "Schema",
+                                    "type": "IfCondition",
+                                    "dependsOn": [],
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "expression": {
+                                            "value": "@pipeline().parameters.CreateSchema",
+                                            "type": "Expression"
+                                        },
+                                        "ifTrueActivities": [
+                                            {
+                                                "name": "ProcessEntitySchema",
+                                                "type": "ExecutePipeline",
+                                                "dependsOn": [],
+                                                "userProperties": [],
+                                                "typeProperties": {
+                                                    "pipeline": {
+                                                        "referenceName": "ProcessEntitySchema",
+                                                        "type": "PipelineReference"
+                                                    },
+                                                    "waitOnCompletion": true,
+                                                    "parameters": {
+                                                        "Query": {
+                                                            "value": "@item().query",
+                                                            "type": "Expression"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "Data",
+                                    "type": "IfCondition",
+                                    "dependsOn": [
+                                        {
+                                            "activity": "Schema",
+                                            "dependencyConditions": [
+                                                "Succeeded"
+                                            ]
+                                        }
+                                    ],
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "expression": {
+                                            "value": "@pipeline().parameters.LoadData",
+                                            "type": "Expression"
+                                        },
+                                        "ifTrueActivities": [
+                                            {
+                                                "name": "ProcessEntityData",
+                                                "type": "ExecutePipeline",
+                                                "dependsOn": [],
+                                                "userProperties": [],
+                                                "typeProperties": {
+                                                    "pipeline": {
+                                                        "referenceName": "ProcessEntityData",
+                                                        "type": "PipelineReference"
+                                                    },
+                                                    "waitOnCompletion": true,
+                                                    "parameters": {
+                                                        "EntityName": {
+                                                            "value": "@item().name",
+                                                            "type": "Expression"
+                                                        },
+                                                        "TableName": {
+                                                            "value": "@item().tableName",
+                                                            "type": "Expression"
+                                                        },
+                                                        "Structure": {
+                                                            "value": "@item().tableStructure",
+                                                            "type": "Expression"
+                                                        },
+                                                        "DataFiles": {
+                                                            "value": "@item().dataFileLocations",
+                                                            "type": "Expression"
+                                                        },
+                                                        "EntityModifiedTime": {
+                                                            "value": "@item().modifiedTime",
+                                                            "type": "Expression"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "parameters": {
+                    "CDMFolder": {
+                        "type": "String",
+                        "defaultValue": "powerbi/WideWorldImporters-1/WideWorldImporters"
+                    },
+                    "ModelFile": {
+                        "type": "String",
+                        "defaultValue": "model.json"
+                    },
+                    "CreateSchema": {
+                        "type": "Bool",
+                        "defaultValue": false
+                    },
+                    "LoadData": {
+                        "type": "Bool",
+                        "defaultValue": true
+                    },
+                    "DataTypeMap": {
+                        "type": "Object",
+                        "defaultValue": {
+                            "String": "nvarchar(100)",
+                            "Int64": "int",
+                            "DateTime": "datetime",
+                            "Boolean": "bit",
+                            "Double": "float",
+                            "Decimal": "float",
+                            "DateTimeOffset": "DateTimeOffset"
+                        }
+                    },
+                    "EntitiesInclusionMap": {
+                        "type": "Array",
+                        "defaultValue": [
+                            "Warehouse StockItems"
+                        ]
+                    },
+                    "EntitiesExclusionMap": {
+                        "type": "Array",
+                        "defaultValue": []
+                    }
+                },
+                "annotations": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/datasets/ADLSGen2ModelFile')]",
+                "[concat(variables('factoryId'), '/datasets/AzureSqlDWTable')]",
+                "[concat(variables('factoryId'), '/pipelines/ProcessEntitySchema')]",
+                "[concat(variables('factoryId'), '/pipelines/ProcessEntityData')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/ProcessEntityData')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "description": "Copy Data across Partitions",
+                "activities": [
+                    {
+                        "name": "ForEachPartitions",
+                        "type": "ForEach",
+                        "dependsOn": [
+                            {
+                                "activity": "Truncate",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "items": {
+                                "value": "@pipeline().parameters.DataFiles",
+                                "type": "Expression"
+                            },
+                            "isSequential": true,
+                            "activities": [
+                                {
+                                    "name": "GetLastRefreshTime",
+                                    "description": "Get Last Refresh Time",
+                                    "type": "Lookup",
+                                    "dependsOn": [],
+                                    "policy": {
+                                        "timeout": "7.00:00:00",
+                                        "retry": 0,
+                                        "retryIntervalInSeconds": 30,
+                                        "secureOutput": false
+                                    },
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "source": {
+                                            "type": "SqlDWSource",
+                                            "sqlReaderQuery": {
+                                                "value": "@{concat('select top 1 * from [dbo].[ADFCDSACopyTracker] where [EntityName] = ''', pipeline().parameters.EntityName,''' and [PartionLocation] = ''', concat(item().folderPath, item().filePath), ''' order by [Id] desc')}",
+                                                "type": "Expression"
+                                            }
+                                        },
+                                        "dataset": {
+                                            "referenceName": "AzureSqlDWTable",
+                                            "type": "DatasetReference",
+                                            "parameters": {
+                                                "TableName": "[concat('[', 'dbo].[ADFCDSACopyTracker]')]",
+                                                "TableSchema": []
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "IsDataRefreshed",
+                                    "description": "Check if Data is refreshed",
+                                    "type": "IfCondition",
+                                    "dependsOn": [
+                                        {
+                                            "activity": "GetLastRefreshTime",
+                                            "dependencyConditions": [
+                                                "Succeeded"
+                                            ]
+                                        }
+                                    ],
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "expression": {
+                                            "value": "@greater(item().refreshTime,coalesce(activity('GetLastRefreshTime').output?.firstRow?.RefreshTime, '0001-01-01'))",
+                                            "type": "Expression"
+                                        },
+                                        "ifTrueActivities": [
+                                            {
+                                                "name": "Copy",
+                                                "type": "Copy",
+                                                "dependsOn": [],
+                                                "policy": {
+                                                    "timeout": "7.00:00:00",
+                                                    "retry": 0,
+                                                    "retryIntervalInSeconds": 30,
+                                                    "secureOutput": false
+                                                },
+                                                "userProperties": [],
+                                                "typeProperties": {
+                                                    "source": {
+                                                        "type": "AzureBlobFSSource",
+                                                        "recursive": true
+                                                    },
+                                                    "sink": {
+                                                        "type": "SqlDWSink",
+                                                        "allowPolyBase": false,
+                                                        "writeBatchSize": 10000
+                                                    },
+                                                    "enableStaging": false,
+                                                    "enableSkipIncompatibleRow": true,
+                                                    "redirectIncompatibleRowSettings": {
+                                                        "linkedServiceName": {
+                                                            "referenceName": "AzureStorage",
+                                                            "type": "LinkedServiceReference"
+                                                        },
+                                                        "path": {
+                                                            "value": "cdsademo/@{pipeline().parameters.TableName}",
+                                                            "type": "Expression"
+                                                        }
+                                                    },
+                                                    "dataIntegrationUnits": 0
+                                                },
+                                                "inputs": [
+                                                    {
+                                                        "referenceName": "ADLSGen2DataFile",
+                                                        "type": "DatasetReference",
+                                                        "parameters": {
+                                                            "Folder": {
+                                                                "value": "@item().folderPath",
+                                                                "type": "Expression"
+                                                            },
+                                                            "File": {
+                                                                "value": "@item().filePath",
+                                                                "type": "Expression"
+                                                            },
+                                                            "Schema": {
+                                                                "value": "@pipeline().parameters.Structure",
+                                                                "type": "Expression"
+                                                            }
+                                                        }
+                                                    }
+                                                ],
+                                                "outputs": [
+                                                    {
+                                                        "referenceName": "AzureSqlDWTable",
+                                                        "type": "DatasetReference",
+                                                        "parameters": {
+                                                            "TableName": {
+                                                                "value": "@pipeline().parameters.TableName",
+                                                                "type": "Expression"
+                                                            },
+                                                            "TableSchema": {
+                                                                "value": "@pipeline().parameters.Structure",
+                                                                "type": "Expression"
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "name": "UpdateLastRefreshTime",
+                                                "type": "SqlServerStoredProcedure",
+                                                "dependsOn": [
+                                                    {
+                                                        "activity": "Copy",
+                                                        "dependencyConditions": [
+                                                            "Succeeded"
+                                                        ]
+                                                    }
+                                                ],
+                                                "policy": {
+                                                    "timeout": "7.00:00:00",
+                                                    "retry": 0,
+                                                    "retryIntervalInSeconds": 30,
+                                                    "secureOutput": false
+                                                },
+                                                "userProperties": [],
+                                                "typeProperties": {
+                                                    "storedProcedureName": "[concat('[', 'dbo].[ExecuteQuery]')]",
+                                                    "storedProcedureParameters": {
+                                                        "query": {
+                                                            "value": {
+                                                                "value": "@{concat('insert into [dbo].[ADFCDSACopyTracker] values(''',pipeline().parameters.EntityName,''',''',concat(item().folderPath, item().filePath),''', ''',pipeline().RunId, ''', ''',item().refreshTime,''',''',pipeline().parameters.EntityModifiedTime,''')')}",
+                                                                "type": "Expression"
+                                                            },
+                                                            "type": "String"
+                                                        }
+                                                    }
+                                                },
+                                                "linkedServiceName": {
+                                                    "referenceName": "AzureSqlDW",
+                                                    "type": "LinkedServiceReference"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "Truncate",
+                        "type": "SqlServerStoredProcedure",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "storedProcedureName": "dbo.ExecuteQuery",
+                            "storedProcedureParameters": {
+                                "query": {
+                                    "value": {
+                                        "value": "@concat('delete from ',pipeline().parameters.TableName)",
+                                        "type": "Expression"
+                                    },
+                                    "type": "String"
+                                }
+                            }
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "AzureSqlDW",
+                            "type": "LinkedServiceReference"
+                        }
+                    }
+                ],
+                "parameters": {
+                    "EntityName": {
+                        "type": "String"
+                    },
+                    "TableName": {
+                        "type": "String"
+                    },
+                    "Structure": {
+                        "type": "Array"
+                    },
+                    "DataFiles": {
+                        "type": "Array"
+                    },
+                    "EntityModifiedTime": {
+                        "type": "String"
+                    }
+                },
+                "annotations": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AzureSqlDW')]",
+                "[concat(variables('factoryId'), '/datasets/AzureSqlDWTable')]",
+                "[concat(variables('factoryId'), '/datasets/ADLSGen2DataFile')]",
+                "[concat(variables('factoryId'), '/linkedServices/AzureStorage')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/ProcessEntitySchema')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "CreateTable",
+                        "type": "SqlServerStoredProcedure",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "storedProcedureName": "dbo.ExecuteQuery",
+                            "storedProcedureParameters": {
+                                "query": {
+                                    "value": {
+                                        "value": "@pipeline().parameters.Query",
+                                        "type": "Expression"
+                                    },
+                                    "type": "String"
+                                }
+                            }
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "AzureSqlDW",
+                            "type": "LinkedServiceReference"
+                        }
+                    }
+                ],
+                "parameters": {
+                    "Query": {
+                        "type": "String"
+                    }
+                },
+                "annotations": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AzureSqlDW')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/ADLSGen2ModelFile')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "ADLSGen2",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "Folder": {
+                        "type": "String"
+                    },
+                    "File": {
+                        "type": "String"
+                    }
+                },
+                "annotations": [],
+                "type": "AzureBlobFSFile",
+                "typeProperties": {
+                    "format": {
+                        "type": "JsonFormat",
+                        "filePattern": "setOfObjects"
+                    },
+                    "fileName": {
+                        "value": "@dataset().File",
+                        "type": "Expression"
+                    },
+                    "folderPath": {
+                        "value": "@dataset().Folder",
+                        "type": "Expression"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/ADLSGen2')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/ADLSGen2DataFile')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "ADLSGen2",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "Folder": {
+                        "type": "String"
+                    },
+                    "File": {
+                        "type": "String"
+                    },
+                    "Schema": {
+                        "type": "Array"
+                    }
+                },
+                "annotations": [],
+                "type": "AzureBlobFSFile",
+                "structure": {
+                    "value": "@dataset().Schema",
+                    "type": "Expression"
+                },
+                "typeProperties": {
+                    "format": {
+                        "type": "TextFormat",
+                        "columnDelimiter": ",",
+                        "rowDelimiter": "",
+                        "quoteChar": "\"",
+                        "nullValue": "NULL",
+                        "treatEmptyAsNull": true,
+                        "skipLineCount": 0,
+                        "firstRowAsHeader": false
+                    },
+                    "fileName": {
+                        "value": "@dataset().File",
+                        "type": "Expression"
+                    },
+                    "folderPath": {
+                        "value": "@dataset().Folder",
+                        "type": "Expression"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/ADLSGen2')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/AzureSqlDWTable')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureSqlDW",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "TableName": {
+                        "type": "String"
+                    },
+                    "TableSchema": {
+                        "type": "Array"
+                    }
+                },
+                "annotations": [],
+                "type": "AzureSqlDWTable",
+                "structure": {
+                    "value": "@dataset().TableSchema",
+                    "type": "Expression"
+                },
+                "typeProperties": {
+                    "tableName": {
+                        "value": "@dataset().TableName",
+                        "type": "Expression"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AzureSqlDW')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/ADLSGen2')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureBlobFS",
+                "typeProperties": {
+                    "url": "[parameters('ADLSGen2_properties_typeProperties_url')]",
+                    "accountKey": {
+                        "type": "SecureString",
+                        "value": "[parameters('ADLSGen2_accountKey')]"
+                    }
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/AzureStorage')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureStorage",
+                "typeProperties": {
+                    "connectionString": "[parameters('AzureStorage_connectionString')]"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/AzureSqlDW')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureSqlDW",
+                "typeProperties": {
+                    "connectionString": "[parameters('AzureSqlDW_connectionString')]"
+                }
+            },
+            "dependsOn": []
+        }
+    ]
+}
