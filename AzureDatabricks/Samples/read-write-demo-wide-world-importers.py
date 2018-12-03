@@ -174,24 +174,13 @@ display(newSalesCustomerDf)
 
 # COMMAND ----------
 
-def hash_function(val1, val2):
-  return hash(val1 + val2)
-
-from pyspark.sql.functions import udf
-
-hash_function_udf = udf(hash_function)
-
-# COMMAND ----------
-
-newSalesCustomerDf.printSchema()
-
-# COMMAND ----------
-
 from pyspark.sql.functions import concat
 
 hashedSalesCustomerDf = (newSalesCustomerDf.withColumn("ChangeTrackingHash", 
-                                                       concat(newSalesCustomerDf.BuyingGroupID.cast("String"),
-                                                              newSalesCustomerDf.CreditLimit.cast("String"))))
+                                                       concat(col("BuyingGroupID"),
+                                                              col("StandardDiscountPercentage"),
+                                                              col("IsOnCreditHold"),
+                                                              col("DeliveryPostalCode"))))
 
 display(hashedSalesCustomerDf)
 
