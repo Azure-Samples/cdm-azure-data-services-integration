@@ -170,7 +170,7 @@ display(newSalesCustomerDf)
 
 # MAGIC %md
 # MAGIC 
-# MAGIC # Add a hash column for history tracking
+# MAGIC # Add a column for history tracking by concatenating the values of a subset of columns
 
 # COMMAND ----------
 
