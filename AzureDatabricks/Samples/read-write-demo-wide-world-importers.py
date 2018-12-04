@@ -1,7 +1,7 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC 
-# MAGIC # Setup: Define all the inputs variables
+# MAGIC # Setup: Define all the input variables
 
 # COMMAND ----------
 
@@ -31,7 +31,7 @@ tenantID = dbutils.secrets.get(scope = "CDMSampleScope", key = "tenantID")
 # MAGIC 
 # MAGIC # Summary of the contents
 # MAGIC 
-# MAGIC ### This notebook reads in a set of entities from CDM folders, does transformations on a subset of the entities and then writes out all the entities including the modified ones to a new CDM folder
+# MAGIC ### This notebook reads in a set of entities from a CDM folder, does transformations on a subset of the entities and then writes out all the entities including the modified ones to a new CDM folder
 
 # COMMAND ----------
 
@@ -117,7 +117,7 @@ warehousePackageTypesDf = (spark.read.format("com.microsoft.cdm")
 
 # MAGIC %md
 # MAGIC 
-# MAGIC # Populate the buying group entity with unassigned
+# MAGIC # Add an ‘Unassigned’ entry to the buying group entity
 
 # COMMAND ----------
 
@@ -146,7 +146,7 @@ display(newSalesBuyingGroupsDf)
 
 # MAGIC %md
 # MAGIC 
-# MAGIC # Process customer and replace NULL buying group with -1 (Unassigned)
+# MAGIC # Process customer and replace NULL buying group id with -1 (Unassigned)
 
 # COMMAND ----------
 
@@ -300,3 +300,7 @@ cdmModelName = "Transformed-Wide-World-Importers"
                               .option("cdmFolder", outputLocation)
                               .option("cdmModelName", cdmModelName)
                               .save())
+
+# COMMAND ----------
+
+
