@@ -176,13 +176,11 @@ display(newSalesCustomerDf)
 
 from pyspark.sql.functions import concat
 
-hashedSalesCustomerDf = (newSalesCustomerDf.withColumn("ChangeTrackingHash", 
+newSalesCustomerDf = (newSalesCustomerDf.withColumn("ChangeTrackingHash", 
                                                        concat(col("BuyingGroupID"),
                                                               col("StandardDiscountPercentage"),
                                                               col("IsOnCreditHold"),
                                                               col("DeliveryPostalCode"))))
-
-display(hashedSalesCustomerDf)
 
 # COMMAND ----------
 
@@ -192,7 +190,7 @@ display(hashedSalesCustomerDf)
 
 # COMMAND ----------
 
-hashedSalesCustomerDf.createOrReplaceTempView("hashedSalesCustomer")
+newSalesCustomerDf.createOrReplaceTempView("newSalesCustomer")
 salesOrderDf.createOrReplaceTempView("salesOrders")
 salesBuyingGroupsDf.createOrReplaceTempView("salesBuyingGroups")
 salesCustomerCategoriesDf.createOrReplaceTempView("salesCustomerCategories")
@@ -200,7 +198,7 @@ salesCustomerCategoriesDf.createOrReplaceTempView("salesCustomerCategories")
 
 # COMMAND ----------
 
-corporateSalesCustomerDf = spark.sql("select * from hashedSalesCustomer c, salesCustomerCategories cc where c.customerCategoryID = cc.customerCategoryID and cc.CustomerCategoryName != 'Corporate'")
+corporateSalesCustomerDf = spark.sql("select * from newSalesCustomer c, salesCustomerCategories cc where c.customerCategoryID = cc.customerCategoryID and cc.CustomerCategoryName != 'Corporate'")
 
 # COMMAND ----------
 
