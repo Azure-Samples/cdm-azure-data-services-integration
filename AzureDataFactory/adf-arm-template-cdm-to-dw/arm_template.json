@@ -38,7 +38,7 @@
                 "description": "Load Model File",
                 "activities": [
                     {
-                        "name": "LoadModel",
+                        "name": "LoadCDMModel",
                         "type": "Lookup",
                         "dependsOn": [],
                         "policy": {
@@ -155,7 +155,7 @@
                         }
                     },
                     {
-                        "name": "ForEachEntity",
+                        "name": "LoadEntityToDW",
                         "type": "ForEach",
                         "dependsOn": [
                             {
@@ -283,7 +283,7 @@
                     },
                     "CreateSchema": {
                         "type": "Bool",
-                        "defaultValue": false
+                        "defaultValue": true
                     },
                     "LoadData": {
                         "type": "Bool",
@@ -292,7 +292,7 @@
                     "DataTypeMap": {
                         "type": "Object",
                         "defaultValue": {
-                            "String": "nvarchar(100)",
+                            "String": "nvarchar(350)",
                             "Int64": "int",
                             "DateTime": "datetime",
                             "Boolean": "bit",
@@ -303,9 +303,7 @@
                     },
                     "EntitiesInclusionMap": {
                         "type": "Array",
-                        "defaultValue": [
-                            "Warehouse StockItems"
-                        ]
+                         "defaultValue": []
                     },
                     "EntitiesExclusionMap": {
                         "type": "Array",
@@ -414,10 +412,10 @@
                                                     },
                                                     "sink": {
                                                         "type": "SqlDWSink",
-                                                        "allowPolyBase": false,
+                                                        "allowPolyBase": true,
                                                         "writeBatchSize": 10000
                                                     },
-                                                    "enableStaging": false,
+                                                    "enableStaging": true,
                                                     "enableSkipIncompatibleRow": true,
                                                     "redirectIncompatibleRowSettings": {
                                                         "linkedServiceName": {
