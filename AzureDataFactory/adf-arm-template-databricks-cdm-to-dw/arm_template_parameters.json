@@ -3,7 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "factoryName": {
-            "value": "adfcdmwithbricks"
+            "value": ""
+        },
+        "AzureSqlDW_connectionString": {
+            "value": ""
         },
         "ADLSGen2_accountKey": {
             "value": ""
@@ -11,7 +14,13 @@
         "AzureStorage_connectionString": {
             "value": ""
         },
-        "AzureSqlDW_connectionString": {
+        "CDMParser_URL": {
+            "value": "https://<FunctionAppName>.azurewebsites.net/api/Parse"
+        },
+        "AzureDatabricks_domain": {
+            "value": ""
+        },
+        "AzureDatabricks_accessToken": {
             "value": ""
         },
         "ADLSGen2_url": {
