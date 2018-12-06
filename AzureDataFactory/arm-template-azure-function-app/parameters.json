@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_cdmparser_name": {
+            "value": "l"
+        },
+        "serverfarms_cdmparserPlan_name": {
+            "value": ""
+        },
+        "storageAccounts_cdmparserstorage_name": {
+            "value": ""
+        },
+        "hostNameBindings_cdmparser.azurewebsites.net_name": {
+            "value": "<insert parameter value: "sites_cdmparser_name" >.azurewebsites.net"
+        }
+    }
+}

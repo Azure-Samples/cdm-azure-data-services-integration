@@ -6,6 +6,10 @@
             "type": "string",
             "metadata": "Data Factory Name"
         },
+        "AzureSqlDW_connectionString": {
+            "type": "secureString",
+            "metadata": "Secure string for 'connectionString' of 'AzureSqlDW'"
+        },
         "ADLSGen2_accountKey": {
             "type": "secureString",
             "metadata": "Secure string for 'accountKey' of 'ADLSGen2'"
@@ -14,13 +18,17 @@
             "type": "secureString",
             "metadata": "Secure string for 'connectionString' of 'AzureStorage'"
         },
-        "AzureSqlDW_connectionString": {
-            "type": "secureString",
-            "metadata": "Secure string for 'connectionString' of 'AzureSqlDW'"
-        },
         "CDMParser_URL": {
             "type": "string",
             "metadata": "Azure Function App End Point"
+        },
+        "AzureDatabricks_accessToken": {
+            "type": "secureString",
+            "metadata": "Secure string for 'accessToken' of 'AzureDatabricks'"
+        },
+        "AzureDatabricks_domain": {
+            "type": "string",
+            "metadata": "Domain for 'AzureDatabricks'"
         },
         "ADLSGen2_url": {
             "type": "string"
@@ -327,9 +335,39 @@
                 "description": "Load Model File",
                 "activities": [
                     {
+                        "name": "PrepareCDMData",
+                        "type": "DatabricksNotebook",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "01:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "notebookPath": {
+                                "value": "@pipeline().parameters.NoteBookPath",
+                                "type": "Expression"
+                            }
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "AzureDatabricks",
+                            "type": "LinkedServiceReference"
+                        }
+                    },
+                    {
                         "name": "LoadCdmModel",
                         "type": "Lookup",
-                        "dependsOn": [],
+                        "dependsOn": [
+                            {
+                                "activity": "PrepareCDMData",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
                         "policy": {
                             "timeout": "00:20:00",
                             "retry": 0,
@@ -562,7 +600,7 @@
                     }
                 ],
                 "parameters": {
-                    "NoteBookPath": {
+                    "NoteBookPath":{
                         "type": "String",
                         "defaultValue": "read-write-demo-wide-world-importers.py"
                     },
@@ -613,41 +651,37 @@
             ]
         },
         {
-            "name": "[concat(parameters('factoryName'), '/ADLSGen2ModelFile')]",
+            "name": "[concat(parameters('factoryName'), '/AzureSqlDWTable')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
                 "linkedServiceName": {
-                    "referenceName": "ADLSGen2",
+                    "referenceName": "AzureSqlDW",
                     "type": "LinkedServiceReference"
                 },
                 "parameters": {
-                    "Folder": {
+                    "TableName": {
                         "type": "String"
                     },
-                    "File": {
-                        "type": "String"
+                    "TableSchema": {
+                        "type": "Array"
                     }
                 },
                 "annotations": [],
-                "type": "AzureBlobFSFile",
+                "type": "AzureSqlDWTable",
+                "structure": {
+                    "value": "@dataset().TableSchema",
+                    "type": "Expression"
+                },
                 "typeProperties": {
-                    "format": {
-                        "type": "JsonFormat",
-                        "filePattern": "setOfObjects"
-                    },
-                    "fileName": {
-                        "value": "@dataset().File",
-                        "type": "Expression"
-                    },
-                    "folderPath": {
-                        "value": "@dataset().Folder",
+                    "tableName": {
+                        "value": "@dataset().TableName",
                         "type": "Expression"
                     }
                 }
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/linkedServices/ADLSGen2')]"
+                "[concat(variables('factoryId'), '/linkedServices/AzureSqlDW')]"
             ]
         },
         {
@@ -702,38 +736,55 @@
             ]
         },
         {
-            "name": "[concat(parameters('factoryName'), '/AzureSqlDWTable')]",
+            "name": "[concat(parameters('factoryName'), '/ADLSGen2ModelFile')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
             "properties": {
                 "linkedServiceName": {
-                    "referenceName": "AzureSqlDW",
+                    "referenceName": "ADLSGen2",
                     "type": "LinkedServiceReference"
                 },
                 "parameters": {
-                    "TableName": {
+                    "Folder": {
                         "type": "String"
                     },
-                    "TableSchema": {
-                        "type": "Array"
+                    "File": {
+                        "type": "String"
                     }
                 },
                 "annotations": [],
-                "type": "AzureSqlDWTable",
-                "structure": {
-                    "value": "@dataset().TableSchema",
-                    "type": "Expression"
-                },
+                "type": "AzureBlobFSFile",
                 "typeProperties": {
-                    "tableName": {
-                        "value": "@dataset().TableName",
+                    "format": {
+                        "type": "JsonFormat",
+                        "filePattern": "setOfObjects"
+                    },
+                    "fileName": {
+                        "value": "@dataset().File",
+                        "type": "Expression"
+                    },
+                    "folderPath": {
+                        "value": "@dataset().Folder",
                         "type": "Expression"
                     }
                 }
             },
             "dependsOn": [
-                "[concat(variables('factoryId'), '/linkedServices/AzureSqlDW')]"
+                "[concat(variables('factoryId'), '/linkedServices/ADLSGen2')]"
             ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/AzureSqlDW')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureSqlDW",
+                "typeProperties": {
+                    "connectionString": "[parameters('AzureSqlDW_connectionString')]"
+                }
+            },
+            "dependsOn": []
         },
         {
             "name": "[concat(parameters('factoryName'), '/ADLSGen2')]",
@@ -766,14 +817,21 @@
             "dependsOn": []
         },
         {
-            "name": "[concat(parameters('factoryName'), '/AzureSqlDW')]",
+            "name": "[concat(parameters('factoryName'), '/AzureDatabricks')]",
             "type": "Microsoft.DataFactory/factories/linkedServices",
             "apiVersion": "2018-06-01",
             "properties": {
                 "annotations": [],
-                "type": "AzureSqlDW",
+                "type": "AzureDatabricks",
                 "typeProperties": {
-                    "connectionString": "[parameters('AzureSqlDW_connectionString')]"
+                    "domain": "[parameters('AzureDatabricks_domain')]",
+                    "accessToken": {
+                        "type": "SecureString",
+                        "value": "[parameters('AzureDatabricks_accessToken')]"
+                    },
+                    "newClusterNodeType": "Standard_DS3_v2",
+                    "newClusterNumOfWorker": "1",
+                    "newClusterVersion": "3.5.x-scala2.10"
                 }
             },
             "dependsOn": []
