@@ -29,9 +29,9 @@ tenantID = dbutils.secrets.get(scope = "CDMSampleScope", key = "tenantID")
 
 # MAGIC %md
 # MAGIC 
-# MAGIC # Summary of the contents
+# MAGIC # Summary
 # MAGIC 
-# MAGIC ### This notebook reads in a set of entities from a CDM folder, does transformations on a subset of the entities and then writes out all the entities including the modified ones to a new CDM folder
+# MAGIC ### This notebook reads a CDM folder, applies transformations to some of the entities and then writes out all entities including the modified ones to a new CDM folder
 
 # COMMAND ----------
 
@@ -146,7 +146,7 @@ display(newSalesBuyingGroupsDf)
 
 # MAGIC %md
 # MAGIC 
-# MAGIC # Process customer and replace NULL buying group id with -1 (Unassigned)
+# MAGIC # Replace NULL BuyingGroupID with -1 (Unassigned)
 
 # COMMAND ----------
 
@@ -170,7 +170,7 @@ display(newSalesCustomerDf)
 
 # MAGIC %md
 # MAGIC 
-# MAGIC # Add a column for history tracking by concatenating the values of a subset of columns
+# MAGIC # Add computed column for history tracking
 
 # COMMAND ----------
 
