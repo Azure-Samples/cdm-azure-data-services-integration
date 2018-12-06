@@ -328,7 +328,7 @@
             ]
         },
         {
-            "name": "[concat(parameters('factoryName'), '/CDMToDW')]",
+            "name": "[concat(parameters('factoryName'), '/CDMPrepToDW')]",
             "type": "Microsoft.DataFactory/factories/pipelines",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -419,7 +419,7 @@
                             "method": "POST",
                             "headers": {},
                             "body": {
-                                "model": "@activity('LoadModel').output.firstRow",
+                                "model": "@activity('LoadCdmModel').output.firstRow",
                                 "dataTypeMap": "@pipeline().parameters.DataTypeMap"
                             }
                         }
@@ -472,7 +472,7 @@
                         "userProperties": [],
                         "typeProperties": {
                             "items": {
-                                "value": "@activity('Parse').output.result",
+                                "value": "@activity('ParseModel').output.result",
                                 "type": "Expression"
                             },
                             "condition": {
