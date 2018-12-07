@@ -1,4 +1,4 @@
-# CDM Azure Data Services Integration
+# CDM folders and Azure Data Services integration
 
 Tutorial and sample code for integrating Power BI dataflows and Azure Data Services using CDM folders in Azure Data Lake Storage Gen2.
 
@@ -14,7 +14,7 @@ The tutorial walks through use of CDM folders in a modern data warehouse scenari
 
 Each step leverages the metadata contained in the CDM folder to make it easier and simpler to accomplish the task.  
 
-The samples include code, libraries, and Azure resource templates that you can use with CDM folders that you create from your own data.
+The samples include code, libraries, and Azure resource templates that you can use with CDM folders you create from your own data.
 
 IMPORTANT: the sample code is provided as-is with no warranties and is intended for learning purposes only.
 
