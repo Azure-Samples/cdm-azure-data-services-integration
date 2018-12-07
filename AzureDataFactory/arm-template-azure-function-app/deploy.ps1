@@ -67,8 +67,11 @@ Function RegisterRP {
 $ErrorActionPreference = "Stop"
 
 # sign in
-Write-Host "Logging in...";
-Login-AzureRmAccount;
+$context = Get-AzureRmContext;
+if(!$context.Account) {
+    Write-Host "Logging in...";
+    Login-AzureRmAccount;
+}
 
 # select subscription
 Write-Host "Selecting subscription '$subscriptionId'";
@@ -85,8 +88,7 @@ if($resourceProviders.length) {
 
 #Create or check for existing resource group
 $resourceGroup = Get-AzureRmResourceGroup -Name $resourceGroupName -ErrorAction SilentlyContinue
-if(!$resourceGroup)
-{
+if(!$resourceGroup) {
     Write-Host "Resource group '$resourceGroupName' does not exist. To create a new resource group, please enter a location.";
     if(!$resourceGroupLocation) {
         $resourceGroupLocation = Read-Host "resourceGroupLocation";
@@ -100,7 +102,7 @@ else{
 
 # Start the deployment
 Write-Host "Starting deployment...";
-if(Test-Path $parametersFilePath) {
+if($parametersFilePath -and (Test-Path $parametersFilePath)) {
     New-AzureRmResourceGroupDeployment -ResourceGroupName $resourceGroupName -TemplateFile $templateFilePath -TemplateParameterFile $parametersFilePath;
 } else {
     New-AzureRmResourceGroupDeployment -ResourceGroupName $resourceGroupName -TemplateFile $templateFilePath;
