@@ -10,7 +10,7 @@ The tutorial walks through use of CDM folders in a modern data warehouse scenari
 - Use an Azure Databricks notebook that prepares and cleanses the data in the CDM folder, and then writes the updated data to a new CDM folder in ADLS Gen2;
 - Use Azure Machine Learning to train and publish a model using data from the CDM folder.
 - Use an Azure Data Factory pipeline to Load data from the CDM folder into staging tables in Azure SQL Data Warehouse and then invoke stored procedures that transform the data into a dimensional model.
-- use Azure Data Factory to orchestrate the overall process and monitor execution.
+- Use Azure Data Factory to orchestrate the overall process and monitor execution.
 
 Each step leverages the metadata contained in the CDM folder to make it easier and simpler to accomplish the task.  
 
