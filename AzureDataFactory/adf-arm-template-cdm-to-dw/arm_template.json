@@ -564,7 +564,7 @@
                 "parameters": {
                     "CDMFolder": {
                         "type": "String",
-                        "defaultValue": "powerbi/WideWorldImporters-1/WideWorldImporters"
+                        "defaultValue": "powerbi/<workspacename>/WideWorldImporters-Sales-Prep"
                     },
                     "ModelFile": {
                         "type": "String",
@@ -572,7 +572,7 @@
                     },
                     "CreateSchema": {
                         "type": "Bool",
-                        "defaultValue": false
+                        "defaultValue": true
                     },
                     "LoadData": {
                         "type": "Bool",
