@@ -617,7 +617,7 @@
                     "SourceCdmFolder": {
                         "defaultValue": "https://cdsabyosadev01dxt.dfs.core.windows.net/powerbi/WideWorldImporters-1/WideWorldImporters-Orders/model.json",
                         "type": "String"
-                    }
+                    },
                     "NotebookPath":{
                         "type": "String",
                         "defaultValue": "/read-write-demo-wide-world-importers"
