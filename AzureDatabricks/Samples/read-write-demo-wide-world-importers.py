@@ -22,6 +22,7 @@ if outputLocation == '':
 
 # Parameters to authenticate to ADLS Gen 2. Replace <secretscope> with the Azure Key Vault-backed secret scope that you created. Refer to
 # https://docs.azuredatabricks.net/user-guide/secrets/index.html for instructions
+# You can also specify the credentials in the notebook but that is not recommended
 appID = dbutils.secrets.get(scope = "<secretscope>", key = "appID")
 appKey = dbutils.secrets.get(scope = "<secretscope>", key = "appKey")
 tenantID = dbutils.secrets.get(scope = "<secretscope>", key = "tenantID")
