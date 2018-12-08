@@ -15,10 +15,10 @@ outputLocation = dbutils.widgets.get("outputCDMFolderLocation")
 
 # Default values if no values specified in widgets. Replace <adlsgen2accountname> and <workspacename> with your values
 if inputLocation == '':
-   inputLocation = "https://<adlsgen2accountname>.dfs.core.windows.net/powerbi/<workspacename>/WideWorldImporters-Sales/model.json"
+   inputLocation = "https://<adlsgen2accountname>.dfs.core.windows.net/powerbi/<workspacename>/WideWorldImporters-Orders/model.json"
 
 if outputLocation == '':
-   outputLocation = "https://<adlsgen2accountname>.dfs.core.windows.net/powerbi/<workspacename>/WideWorldImporters-Sales-Prep” 
+   outputLocation = "https://<adlsgen2accountname>.dfs.core.windows.net/powerbi/<workspacename>/WideWorldImporters-Orders-Prep” 
 
 # Parameters to authenticate to ADLS Gen 2. Replace <secretscope> with the Azure Key Vault-backed secret scope that you created. Refer to
 # https://docs.azuredatabricks.net/user-guide/secrets/index.html for instructions
