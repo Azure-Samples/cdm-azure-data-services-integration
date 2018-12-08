@@ -13,17 +13,18 @@ dbutils.widgets.text("outputCDMFolderLocation", "","OutputCDMFolderLocation")
 inputLocation = dbutils.widgets.get("inputCDMFolderLocation")
 outputLocation = dbutils.widgets.get("outputCDMFolderLocation")
 
-# Default values if no values specified in widgets
+# Default values if no values specified in widgets. Replace <adlsgen2accountname> and <workspacename> with your values
 if inputLocation == '':
-   inputLocation = "https://cdsabyosadev01dxt.dfs.core.windows.net/powerbi/WideWorldImporters-1/WideWorldImporters-Orders/model.json"
+   inputLocation = "https://<adlsgen2accountname>.dfs.core.windows.net/powerbi/<workspacename>/WideWorldImporters-Sales/model.json"
 
 if outputLocation == '':
-   outputLocation = "https://cdsabyosadev01dxt.dfs.core.windows.net/powerbi/PremalTest/wideworldimportersdemo"
+   outputLocation = "https://<adlsgen2accountname>.dfs.core.windows.net/powerbi/<workspacename>/WideWorldImporters-Sales-Prep” 
 
-# Parameters to authenticate to ADLS Gen 2
-appID = dbutils.secrets.get(scope = "CDMSampleScope", key = "appID")
-appKey = dbutils.secrets.get(scope = "CDMSampleScope", key = "appKey")
-tenantID = dbutils.secrets.get(scope = "CDMSampleScope", key = "tenantID")
+# Parameters to authenticate to ADLS Gen 2. Replace <secretscope> with the Azure Key Vault-backed secret scope that you created. Refer to
+# https://docs.azuredatabricks.net/user-guide/secrets/index.html for instructions
+appID = dbutils.secrets.get(scope = "<secretscope>", key = "appID")
+appKey = dbutils.secrets.get(scope = "<secretscope>", key = "appKey")
+tenantID = dbutils.secrets.get(scope = "<secretscope>", key = "tenantID")
 
 # COMMAND ----------
 
@@ -198,7 +199,7 @@ salesCustomerCategoriesDf.createOrReplaceTempView("salesCustomerCategories")
 
 # COMMAND ----------
 
-corporateSalesCustomerDf = spark.sql("select * from newSalesCustomer c, salesCustomerCategories cc where c.customerCategoryID = cc.customerCategoryID and cc.CustomerCategoryName != 'Corporate'")
+corporateSalesCustomerDf = spark.sql("select c.* from newSalesCustomer c, salesCustomerCategories cc where c.customerCategoryID = cc.customerCategoryID and cc.CustomerCategoryName != 'Corporate'")
 
 # COMMAND ----------
 
@@ -236,7 +237,7 @@ cdmModelName = "Transformed-Wide-World-Importers"
 # COMMAND ----------
 
 (corporateSalesCustomerDf.write.format("com.microsoft.cdm")
-                               .option("entity", "Corporate Sales Customers")
+                               .option("entity", "Sales Customers")
                                .option("appId", appID)
                                .option("appKey", appKey)
                                .option("tenantId", tenantID)
