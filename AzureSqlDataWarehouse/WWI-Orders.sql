@@ -22,6 +22,190 @@ IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = N'expired')
 EXEC('CREATE SCHEMA [expired]')
 GO
 
+-- STAGING TABLES 
+IF(OBJECT_ID('dbo.SalesOrderLines')) IS NOT NULL DROP TABLE [dbo].[SalesOrderLines]
+CREATE TABLE [dbo].[SalesOrderLines] 
+(
+    [OrderLineID] bigint null ,
+    [OrderID] bigint null ,
+    [StockItemID] bigint null ,
+    [Description] nvarchar(300) null ,
+    [PackageTypeID] bigint null ,
+    [Quantity] bigint null ,
+    [UnitPrice] decimal(18,4) null ,
+    [TaxRate] decimal(18,4) null ,
+    [PickedQuantity] bigint null ,
+    [PickingCompletedWhen] datetime null ,
+    [LastEditedBy] bigint null ,
+    [LastEditedWhen] datetime null 
+)
+WITH 
+(
+    CLUSTERED COLUMNSTORE INDEX,
+    DISTRIBUTION = ROUND_ROBIN
+)
+
+IF(OBJECT_ID('dbo.SalesOrders')) IS NOT NULL DROP TABLE [dbo].[SalesOrders]
+CREATE TABLE [dbo].[SalesOrders] 
+(
+    [OrderID] bigint null ,
+    [CustomerID] bigint null ,
+    [SalespersonPersonID] bigint null ,
+    [PickedByPersonID] bigint null ,
+    [ContactPersonID] bigint null ,
+    [BackorderOrderID] bigint null ,
+    [OrderDate] datetime null ,
+    [ExpectedDeliveryDate] datetime null ,
+    [CustomerPurchaseOrderNumber] nvarchar(300) null ,
+    [IsUndersupplyBackordered] bit null ,
+    [Comments] nvarchar(300) null ,
+    [DeliveryInstructions] nvarchar(300) null ,
+    [InternalComments] nvarchar(300) null ,
+    [PickingCompletedWhen] datetime null ,
+    [LastEditedBy] bigint null ,
+    [LastEditedWhen] datetime null 
+)
+WITH 
+(
+    CLUSTERED COLUMNSTORE INDEX,
+    DISTRIBUTION = ROUND_ROBIN
+)
+
+IF(OBJECT_ID('dbo.SalesCustomers')) IS NOT NULL DROP TABLE [dbo].[SalesCustomers]
+CREATE TABLE [dbo].[SalesCustomers] 
+(
+    [CustomerID] bigint null ,
+    [CustomerName] nvarchar(300) null ,
+    [BillToCustomerID] bigint null ,
+    [CustomerCategoryID] bigint null ,
+    [BuyingGroupID] bigint null ,
+    [PrimaryContactPersonID] bigint null ,
+    [AlternateContactPersonID] bigint null ,
+    [DeliveryMethodID] bigint null ,
+    [DeliveryCityID] bigint null ,
+    [PostalCityID] bigint null ,
+    [CreditLimit] decimal(18,4) null ,
+    [AccountOpenedDate] datetime null ,
+    [StandardDiscountPercentage] decimal(18,4) null ,
+    [IsStatementSent] bit null ,
+    [IsOnCreditHold] bit null ,
+    [PaymentDays] bigint null ,
+    [PhoneNumber] nvarchar(300) null ,
+    [FaxNumber] nvarchar(300) null ,
+    [DeliveryRun] nvarchar(300) null ,
+    [RunPosition] nvarchar(300) null ,
+    [WebsiteURL] nvarchar(300) null ,
+    [DeliveryAddressLine1] nvarchar(300) null ,
+    [DeliveryAddressLine2] nvarchar(300) null ,
+    [DeliveryPostalCode] nvarchar(300) null ,
+    [DeliveryLocation] nvarchar(300) null ,
+    [PostalAddressLine1] nvarchar(300) null ,
+    [PostalAddressLine2] nvarchar(300) null ,
+    [PostalPostalCode] nvarchar(300) null ,
+    [LastEditedBy] bigint null ,
+    [ValidFrom] datetime null ,
+    [ValidTo] datetime null 
+)
+WITH 
+(
+    CLUSTERED COLUMNSTORE INDEX,
+    DISTRIBUTION = ROUND_ROBIN
+)
+
+IF(OBJECT_ID('dbo.SalesCustomerCategories')) IS NOT NULL DROP TABLE [dbo].[SalesCustomerCategories]
+CREATE TABLE [dbo].[SalesCustomerCategories] 
+(
+    [CustomerCategoryID] bigint null ,
+    [CustomerCategoryName] nvarchar(300) null ,
+    [LastEditedBy] bigint null ,
+    [ValidFrom] datetime null ,
+    [ValidTo] datetime null 
+)
+WITH 
+(
+    CLUSTERED COLUMNSTORE INDEX,
+    DISTRIBUTION = ROUND_ROBIN
+)
+
+IF(OBJECT_ID('dbo.SalesBuyingGroups')) IS NOT NULL DROP TABLE [dbo].[SalesBuyingGroups]
+CREATE TABLE [dbo].[SalesBuyingGroups] 
+(
+    [BuyingGroupID] bigint null ,
+    [BuyingGroupName] nvarchar(300) null ,
+    [LastEditedBy] bigint null ,
+    [ValidFrom] datetime null ,
+    [ValidTo] datetime null 
+)
+WITH 
+(
+    CLUSTERED COLUMNSTORE INDEX,
+    DISTRIBUTION = ROUND_ROBIN
+)
+
+IF(OBJECT_ID('dbo.WarehouseStockItems')) IS NOT NULL DROP TABLE [dbo].[WarehouseStockItems]
+CREATE TABLE [dbo].[WarehouseStockItems] 
+(
+    [StockItemID] bigint null ,
+    [StockItemName] nvarchar(300) null ,
+    [SupplierID] bigint null ,
+    [ColorID] bigint null ,
+    [UnitPackageID] bigint null ,
+    [OuterPackageID] bigint null ,
+    [Brand] nvarchar(300) null ,
+    [Size] nvarchar(300) null ,
+    [LeadTimeDays] bigint null ,
+    [QuantityPerOuter] bigint null ,
+    [IsChillerStock] bit null ,
+    [Barcode] nvarchar(300) null ,
+    [TaxRate] decimal(18,4) null ,
+    [UnitPrice] decimal(18,4) null ,
+    [RecommendedRetailPrice] decimal(18,4) null ,
+    [TypicalWeightPerUnit] decimal(18,4) null ,
+    [MarketingComments] nvarchar(300) null ,
+    [InternalComments] nvarchar(300) null ,
+    [CustomFields] nvarchar(300) null ,
+    [Tags] nvarchar(300) null ,
+    [SearchDetails] nvarchar(300) null ,
+    [LastEditedBy] bigint null ,
+    [ValidFrom] datetime null ,
+    [ValidTo] datetime null 
+)
+WITH 
+(
+    CLUSTERED COLUMNSTORE INDEX,
+    DISTRIBUTION = ROUND_ROBIN
+)
+
+IF(OBJECT_ID('dbo.WarehouseColors')) IS NOT NULL DROP TABLE [dbo].[WarehouseColors]
+CREATE TABLE [dbo].[WarehouseColors] 
+(
+    [ColorID] bigint null ,
+    [ColorName] nvarchar(300) null ,
+    [LastEditedBy] bigint null ,
+    [ValidFrom] datetime null ,
+    [ValidTo] datetime null 
+)
+WITH 
+(
+    CLUSTERED COLUMNSTORE INDEX,
+    DISTRIBUTION = ROUND_ROBIN
+)
+
+IF(OBJECT_ID('dbo.WarehousePackageTypes')) IS NOT NULL DROP TABLE [dbo].[WarehousePackageTypes]
+CREATE TABLE [dbo].[WarehousePackageTypes] 
+(
+    [PackageTypeID] bigint null ,
+    [PackageTypeName] nvarchar(300) null ,
+    [LastEditedBy] bigint null ,
+    [ValidFrom] datetime null ,
+    [ValidTo] datetime null 
+)
+WITH 
+(
+    CLUSTERED COLUMNSTORE INDEX,
+    DISTRIBUTION = ROUND_ROBIN
+)
+
 -- DIMENSIONAL MODEL TABLES 
 IF(OBJECT_ID('wwi.Order')) IS NOT NULL DROP TABLE [wwi].[Order]
 CREATE TABLE [wwi].[Order]

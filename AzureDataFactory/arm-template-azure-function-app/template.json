@@ -3,16 +3,20 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "sites_cdmparser_name": {
-            "type": "String"
+            "type": "string",
+            "defaultValue": "[concat('CDM-', uniqueString(subscription().subscriptionId, resourceGroup().id), '-Site')]"
         },
         "serverfarms_cdmparserPlan_name": {
-            "type": "String"
+            "type": "string",
+            "defaultValue": "[concat('CDM-', uniqueString(subscription().subscriptionId, resourceGroup().id), '-Plan')]"
         },
         "storageAccounts_cdmparserstorage_name": {
-            "type": "String"
+            "type": "string",
+            "defaultValue": "[concat('cdm', uniqueString(subscription().subscriptionId, resourceGroup().id), 'stg')]"
         },
         "hostNameBindings_cdmparser.azurewebsites.net_name": {
-            "type": "String"
+            "type": "string",
+            "defaultValue": "[concat(parameters('sites_cdmparser_name'), '.azurewebsites.net')]"
         }
     },
     "variables": {},

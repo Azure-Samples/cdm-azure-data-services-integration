@@ -614,7 +614,7 @@
                     },
                     "CreateSchema": {
                         "type": "Bool",
-                        "defaultValue": true
+                        "defaultValue": false
                     },
                     "LoadData": {
                         "type": "Bool",
