@@ -562,10 +562,6 @@
                     }
                 ],
                 "parameters": {
-                    "NoteBookPath": {
-                        "type": "String",
-                        "defaultValue": "read-write-demo-wide-world-importers.py"
-                    },
                     "CDMFolder": {
                         "type": "String",
                         "defaultValue": "powerbi/WideWorldImporters-1/WideWorldImporters"
