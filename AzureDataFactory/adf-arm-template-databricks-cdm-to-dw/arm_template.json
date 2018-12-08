@@ -348,8 +348,18 @@
                         "userProperties": [],
                         "typeProperties": {
                             "notebookPath": {
-                                "value": "@pipeline().parameters.NoteBookPath",
+                                "value": "@pipeline().parameters.NotebookPath",
                                 "type": "Expression"
+                            },
+                            "baseParameters": {
+                                "inputCDMFolderLocation": {
+                                    "value": "@pipeline().parameters.SourceCdmFolder",
+                                    "type": "Expression"
+                                },
+                                "outputCDMFolderLocation": {
+                                    "value": "@pipeline().parameters.PreparedCdmFolder",
+                                    "type": "Expression"
+                                }
                             }
                         },
                         "linkedServiceName": {
@@ -600,9 +610,17 @@
                     }
                 ],
                 "parameters": {
-                    "NoteBookPath":{
+                    "PreparedCdmFolder": {
+                        "defaultValue": "https://cdsabyosadev01dxt.dfs.core.windows.net/powerbi/PremalTest/wideworldimportersdemo",
+                        "type": "String"
+                    },
+                    "SourceCdmFolder": {
+                        "defaultValue": "https://cdsabyosadev01dxt.dfs.core.windows.net/powerbi/WideWorldImporters-1/WideWorldImporters-Orders/model.json",
+                        "type": "String"
+                    }
+                    "NotebookPath":{
                         "type": "String",
-                        "defaultValue": "read-write-demo-wide-world-importers.py"
+                        "defaultValue": "/read-write-demo-wide-world-importers"
                     },
                     "CDMFolder": {
                         "type": "String",
