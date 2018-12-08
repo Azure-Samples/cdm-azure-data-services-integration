@@ -348,8 +348,18 @@
                         "userProperties": [],
                         "typeProperties": {
                             "notebookPath": {
-                                "value": "@pipeline().parameters.NoteBookPath",
+                                "value": "@pipeline().parameters.NotebookPath",
                                 "type": "Expression"
+                            },
+                            "baseParameters": {
+                                "inputCDMFolderLocation": {
+                                    "value": "@pipeline().parameters.SourceCdmFolder",
+                                    "type": "Expression"
+                                },
+                                "outputCDMFolderLocation": {
+                                    "value": "@pipeline().parameters.PreparedCdmFolder",
+                                    "type": "Expression"
+                                }
                             }
                         },
                         "linkedServiceName": {
@@ -600,13 +610,21 @@
                     }
                 ],
                 "parameters": {
-                    "NoteBookPath":{
+                    "PreparedCdmFolder": {
+                        "defaultValue": "https://<adlsgen2accountname>.dfs.core.windows.net/powerbi/<workspacename>/WideWorldImporters-Sales-Prep",
+                        "type": "String"
+                    },
+                    "SourceCdmFolder": {
+                        "defaultValue": "https://<adlsgen2accountname>.dfs.core.windows.net/powerbi/<workspacename>/WideWorldImporters-Sales/model.json",
+                        "type": "String"
+                    },
+                    "NotebookPath":{
                         "type": "String",
-                        "defaultValue": "read-write-demo-wide-world-importers.py"
+                        "defaultValue": "/Users/<username>@<tenant>/read-write-demo-wide-world-importers"
                     },
                     "CDMFolder": {
                         "type": "String",
-                        "defaultValue": "powerbi/WideWorldImporters-1/WideWorldImporters"
+                        "defaultValue": "powerbi/<workspacename>/WideWorldImporters-Sales-Prep"
                     },
                     "ModelFile": {
                         "type": "String",
@@ -614,7 +632,7 @@
                     },
                     "CreateSchema": {
                         "type": "Bool",
-                        "defaultValue": false
+                        "defaultValue": true
                     },
                     "LoadData": {
                         "type": "Bool",

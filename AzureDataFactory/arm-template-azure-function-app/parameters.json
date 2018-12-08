@@ -3,16 +3,28 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "sites_cdmparser_name": {
-            "value": "l"
+            "value": "",
+            "metadata": {
+                "description": "Globally unique name that identifies your new function app. Valid characters are a-z, 0-9, and -."
+            }
         },
         "serverfarms_cdmparserPlan_name": {
-            "value": ""
+            "value": "",
+            "metadata": {
+                "description": "The Azure function app runs on an App Service Plan. This is a unique name for the name of your app service plan."
+            }
         },
         "storageAccounts_cdmparserstorage_name": {
-            "value": ""
+            "value": "",
+            "metadata": {
+                "description": "Name of the storage account used by your function app. You can create a new one or use an existing one. Must be lowercase alphanumeric characters, globally unique, and between 3 and 24 characters in length."
+            }
         },
         "hostNameBindings_cdmparser.azurewebsites.net_name": {
-            "value": "<insert parameter value: "sites_cdmparser_name" >.azurewebsites.net"
+            "value": "",
+            "metadata": {
+                "description": "This will be in format of '<your unique name>.azurewebsites.net'"
+            }
         }
     }
 }
