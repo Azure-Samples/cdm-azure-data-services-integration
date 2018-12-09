@@ -18,7 +18,7 @@ if inputLocation == '':
    inputLocation = "https://<adlsgen2accountname>.dfs.core.windows.net/powerbi/<workspacename>/WideWorldImporters-Sales/model.json"
 
 if outputLocation == '':
-   outputLocation = "https://<adlsgen2accountname>.dfs.core.windows.net/powerbi/<workspacename>/WideWorldImporters-Sales-Prep” 
+   outputLocation = "https://<adlsgen2accountname>.dfs.core.windows.net/powerbi/<workspacename>/WideWorldImporters-Sales-Prep"
 
 # Parameters to authenticate to ADLS Gen 2. Replace <secretscope> with the Azure Key Vault-backed secret scope that you created. Refer to
 # https://docs.azuredatabricks.net/user-guide/secrets/index.html for instructions
