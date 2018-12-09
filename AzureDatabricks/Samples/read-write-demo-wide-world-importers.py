@@ -1,7 +1,15 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC 
-# MAGIC # Setup: Define all the input variables
+# MAGIC # Summary
+# MAGIC 
+# MAGIC ### This notebook reads a CDM folder, applies transformations to some of the entities and then writes out all entities including the modified ones to a new CDM folder
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC 
+# MAGIC # Define input variables
 
 # COMMAND ----------
 
@@ -18,7 +26,7 @@ if inputLocation == '':
    inputLocation = "https://<adlsgen2accountname>.dfs.core.windows.net/powerbi/<workspacename>/WideWorldImporters-Sales/model.json"
 
 if outputLocation == '':
-   outputLocation = "https://<adlsgen2accountname>.dfs.core.windows.net/powerbi/<workspacename>/WideWorldImporters-Sales-PrepTest"
+   outputLocation = "https://<adlsgen2accountname>.dfs.core.windows.net/powerbi/<workspacename>/WideWorldImporters-Sales-Prep” 
 
 # Parameters to authenticate to ADLS Gen 2. Replace <secretscope> with the Azure Key Vault-backed secret scope that you created. Refer to
 # https://docs.azuredatabricks.net/user-guide/secrets/index.html for instructions
@@ -27,13 +35,17 @@ appID = dbutils.secrets.get(scope = "<secretscope>", key = "appID")
 appKey = dbutils.secrets.get(scope = "<secretscope>", key = "appKey")
 tenantID = dbutils.secrets.get(scope = "<secretscope>", key = "tenantID")
 
+# Alternatively, you can specify the credentials in the notebook but that is not recommended
+appID = "<appidvalue>"
+appKey = "<appKeyvalue>"
+tenantID = "<tenantID/directoryvalue>"
+
+
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC 
-# MAGIC # Summary
-# MAGIC 
-# MAGIC ### This notebook reads a CDM folder, applies transformations to some of the entities and then writes out all entities including the modified ones to a new CDM folder
+# MAGIC # Read entities from input CDM folder
 
 # COMMAND ----------
 
@@ -206,7 +218,7 @@ corporateSalesCustomerDf = spark.sql("select c.* from newSalesCustomer c, salesC
 
 # MAGIC %md
 # MAGIC 
-# MAGIC # Write out all the entities
+# MAGIC # Write all entities to output CDM folder
 
 # COMMAND ----------
 
