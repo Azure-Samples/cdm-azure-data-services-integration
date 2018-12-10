@@ -154,27 +154,55 @@ WITH
 )
 
 
-IF(OBJECT_ID('wwi.dimDate')) IS NOT NULL DROP TABLE [wwi].[dimDate]
-CREATE TABLE [wwi].[dimDate]
-WITH (DISTRIBUTION = REPLICATE)
+--Calendar Date Dimension
+
+--Variables for start and end date
+DECLARE
+      @num_start  INT = 20000101
+    , @num_end    INT = 20301231
+;
+IF(OBJECT_ID('tempdb..#Nums')) IS NOT NULL DROP TABLE #Nums
+CREATE TABLE #Nums
+WITH (DISTRIBUTION = ROUND_ROBIN)
 AS
-WITH BaseData AS(SELECT A = 0 UNION ALL SELECT A = 1 UNION ALL SELECT A = 2 UNION ALL SELECT A = 3 UNION ALL SELECT A = 4 UNION ALL SELECT A = 5 UNION ALL SELECT A = 6 UNION ALL SELECT A = 7 UNION ALL SELECT A = 8 UNION ALL SELECT A = 9)
-,DateSeed AS(SELECT RID = ROW_NUMBER() OVER (ORDER BY A.A) FROM BaseData A CROSS APPLY BaseData B CROSS APPLY BaseData C CROSS APPLY BaseData D CROSS APPLY BaseData E)
-,DateBase AS(SELECT TOP 18628 DateValue = cast(DATEADD(D, RID, '1979-12-31')AS DATE) FROM DateSeed)
-SELECT DateID = cast(replace(cast(DateValue as varchar(25)), '-', '') as int),
-    DateValue = cast(DateValue as date),
-    DateYear = DATEPART(year, DateValue),
-    DateMonth = DATEPART(month, DateValue),
-    DateDay = DATEPART(day, DateValue),
-    DateDayOfYear = DATEPART(dayofyear, DateValue),
-    DateWeekday = DATEPART(weekday, DateValue),
-    DateWeek = DATEPART(week, DateValue),
-    DateQuarter = DATEPART(quarter, DateValue),
-    DateMonthName = DATENAME(month, DateValue),
-    DateQuarterName = 'Q' + DATENAME(quarter, DateValue),
-    DateWeekdayName = DATENAME(weekday, DateValue),
-    MonthYear = LEFT(DATENAME(month, DateValue), 3) + '-' + DATENAME(year, DateValue)
-FROM DateBase;
+WITH L0 AS(SELECT 1 AS c UNION ALL SELECT 1)
+    , L1 AS(SELECT 1 AS c FROM L0 AS A, L0 AS B)
+    , L2 AS(SELECT 1 AS c FROM L1 AS A, L1 AS B)
+    , L3 AS(SELECT 1 AS c FROM L2 AS A, L2 AS B)
+    , L4 AS(SELECT 1 AS c FROM L3 AS A, L3 AS B)
+    , L5 AS(SELECT 1 AS c FROM L4 AS A, L4 AS B)
+    , Nums AS(SELECT ROW_NUMBER() OVER(ORDER BY c) AS n FROM L5)
+SELECT
+      CAST(n AS BIGINT)   AS num
+    , CAST(n AS CHAR(8))  AS num_string
+FROM Nums
+WHERE n BETWEEN @num_Start AND @num_End
+OPTION(LABEL = 'fn_nums : #nums create')
+;
+GO
+
+IF(OBJECT_ID('dimCalendarDate')) IS NOT NULL DROP TABLE[dimCalendarDate]
+CREATE TABLE[dimCalendarDate]
+WITH (DISTRIBUTION = ROUND_ROBIN
+    , CLUSTERED COLUMNSTORE INDEX
+    , PARTITION(CalendarDateID RANGE RIGHT FOR VALUES())
+)
+AS
+SELECT
+    ISNULL(num, 0) AS CalendarDateID
+    , CONVERT(varchar(10), CAST(num_string AS DATE), 101) AS CalendarDateUSmdy
+    , CONVERT(varchar(10), CAST(num_string AS DATE), 103) AS CalendarDateUKdmy
+    , DATEPART(Year, num_string)                          AS CalendarYear
+    , DATEPART(Quarter, num_string)                       AS CalendarQuarter
+    , DATEPART(Month, num_string)                         AS CalendarMonth
+    , DATEPART(DayOfYear, num_string)                     AS CalendarDayOfYear
+    , DATEPART(Day, num_string)                           AS CalendarDay
+    , DATEPART(Week, num_string)                          AS CalendarWeek
+    , DATEPART(WeekDay, num_string)                       AS CalendarDayOfWeek
+    , DATEPART(ISO_Week, num_string)                      AS ISOWeekNmbr
+FROM #Nums
+WHERE ISDATE(num) = 1
+;
 GO
 
 -- TRANSFORM CODE
