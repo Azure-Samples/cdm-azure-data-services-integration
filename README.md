@@ -20,7 +20,7 @@ IMPORTANT: the sample code is provided as-is with no warranties and is intended 
 
 ## Getting Started
 
-Download the project and open the tutorial in the documentation folder.  
+Download the project and open the tutorial in the tutorial folder.  
 
 ### Prerequisites
 See the tutorial for details.
