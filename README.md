@@ -30,7 +30,7 @@ See the tutorial for detailed installation instructions.
 
 
 ## License
-The sample code and tutorials in this project are licensed under the MIT license. See the [LICENSE](https://github.com/Microsoft/cdm-azure-data-services-integration/blob/master/license) file for more details.
+The sample code and tutorials in this project are licensed under the MIT license. See the [LICENSE](https://github.com/Azure-Samples/cdm-azure-data-services-integration/blob/master/LICENSE.md) file for more details.
 
 ## Contributing
 
