@@ -28,3 +28,10 @@ See the tutorial for details.
 ### Installation
 See the tutorial for detailed installation instructions.
 
+
+## License
+The sample code and tutorials in this project are licensed under the MIT license. See the [LICENSE](https://github.com/Microsoft/cdm-azure-data-services-integration/blob/master/license) file for more details.
+
+## Contributing
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
