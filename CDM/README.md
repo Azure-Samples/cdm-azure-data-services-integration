@@ -9,6 +9,6 @@ The subfolders in this directory provide a set of sample libraries and schema fi
 The latest versions of these libraries can be found in https://github.com/Microsoft/CDM
 
 ## More information
-- [CDM(https://docs.microsoft.com/common-data-model)
+- [CDM](https://docs.microsoft.com/common-data-model)
 - [CDM folders](https://docs.microsoft.com/common-data-model/data-lake)
 - [model.json](https://docs.microsoft.com/common-data-model/model-json)
