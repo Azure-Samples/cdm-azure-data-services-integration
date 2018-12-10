@@ -106,7 +106,7 @@ The tutorial uses data from the Wide World Importers sample database.  You extra
 
     Once imported, connect to the database with SSMS and browse the tables.  Later, when you create the Power BI dataflow, you will pick from these tables to create corresponding entities.
 
-    ![](media/ssmswwi.png)
+    ![](media/ssmsWWI.png)
 
 At this point the Wide World Importers database is deployed and ready for use as a data source.
 
@@ -126,7 +126,7 @@ Running through the tasks above will take some time, so grab a coffee and buckle
 With this task you create a Power BI dataflow to ingest sales data from the Wide World Importers database and save the dataflow definition and extracted data as a CDM folder in ADLS Gen 2.   
 1.	Login to [Power BI online](https://powerbi.microsoft.com/)
 2.	Open the workspace that you previously created and enabled to save dataflows to ADLS Gen 2
-3.	Select **+ Create** and then **Dataflow **
+3.	Select **+ Create** and then **Dataflow**
 
     ![](media/createdataflow.png)
 
@@ -140,7 +140,7 @@ With this task you create a Power BI dataflow to ingest sales data from the Wide
     a.	Enter **“Sales”** in the search bar to filter the list to the tables in the Sales schema.  
     b.	Select **Sales.BuyingGroups, Sales.CustomerCategories, Sales.Customers, Sales.OrderLines, Sales.Orders**  
 
-    ![](media\selecttables.png) 
+    ![](media/selecttables.png) 
 
 8.	Enter **“Warehouse”** in the search bar to filter the list to the tables in the Warehouse schema  
     a.	Select **Warehouse.Colors, Warehouse.PackageTypes, Warehouse.StockItems** 
