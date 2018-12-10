@@ -57,13 +57,13 @@ For uploading files used in the tutorial, create a standard (not premium) storag
 
 ### 3.4	Create an ADLS Gen2 account and configure Power BI connectivity 
 Create and configure an ADLS Gen2 storage account with a filesystem endpoint to allow Power BI to connect to it and configure your Power BI account to allow workspaces to save dataflows to this ADLS Gen2 endpoint.
-1.	See, [Power BI Administrator guide to set up and connect ADLSg2 account to Power BI](https://go.microsoft.com/fwlink/?linkid=2048102)
+1.	See, [Power BI Administrator guide to set up and connect ADLSg2 account to Power BI](https://docs.microsoft.com/power-bi/service-dataflows-connect-azure-data-lake-storage-gen2)
 
 >IMPORTANT: the ADLS Gen2 account you associate with your Power BI account cannot be changed later so consider this step carefully if you are doing this with an important Power BI account.
 
 Once your ADLS Gen2 account and Power BI are configured correctly, you must create a Power BI workspace that is configured to save dataflows to the designated ADLS Gen 2 account. This is the workspace in which you will create the dataflow used in this tutorial. 
 
-2.	See, [Guide to configuring a workspace to store its dataflows in the organization’s lake](https://go.microsoft.com/fwlink/?linkid=2048100)  
+2.	See, [Guide to configuring a workspace to store its dataflows in the organization’s lake](https://docs.microsoft.com/power-bi/service-dataflows-configure-workspace-storage-settings)  
 
 ### 3.5	Create the Wide World Importers database
 The tutorial uses data from the Wide World Importers sample database.  You extract sales data from this database using a Power BI dataflow later in the tutorial.
