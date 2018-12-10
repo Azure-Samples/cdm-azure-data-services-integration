@@ -17,16 +17,16 @@ The tutorial walks through the flows highlighted in green in the diagram below. 
 
 ![](media/overview.png)
 
-The tutorial uses sample libraries, code, and Azure resource templates that you can use with CDM folders that you create from your own data. The core CDM folder libraries can also be found in the [CDM GitHub repository](https://aka.ms/cdmrepo) along with sample schemas. 
+The tutorial uses sample libraries, code, and Azure resource templates that you can use with CDM folders that you create from your own data. The core CDM folder libraries for reading and writing model.json files can also be found in the [CDM GitHub repository](https://aka.ms/cdmrepo) along with sample schemas. 
 
-**IMPORTANT: the sample code is provided as-is with no warranties and is intended for learning purposes only.  You should not use the sample code in production applications.**
+>IMPORTANT: the sample code is provided as-is with no warranties and is intended for learning purposes only.  You should not use the sample code in production applications.
 
 ## 2 Prerequisites
 
 Before you get started you need the following:
 
 - An Azure subscription.  Get a free trial:  https://azure.microsoft.com   
-IMPORTANT: To use the Azure Databricks sample, you will need to convert the free account to a pay-as-you-go subscription. If you have a free trial you can use for the other Azure services in the tutorial but you will have to skip the Azure Databricks section.  
+> IMPORTANT: To use the Azure Databricks sample, you will need to convert the free account to a pay-as-you-go subscription. If you have a free trial you can use for the other Azure services in the tutorial but you will have to skip the Azure Databricks section.  
 - A Power BI Pro account.  Get a free trial: https://powerbi.microsoft.com 
 
 
@@ -110,7 +110,7 @@ The tutorial uses data from the Wide World Importers sample database.  You extra
 
 At this point the Wide World Importers database is deployed and ready for use as a data source.
 
-## Main tutorial
+## 4.0 Main tutorial
 
 Once you’ve completed the getting started tasks, you’re ready to run the main tutorial, in which you:
 - **Connect to an operational database and extract sales data into a CDM folder** in ADLS gen 2 using a Power BI dataflow. 
@@ -205,12 +205,12 @@ In this section, you use an Azure Databricks notebook to process the data in the
     - Grant the service principal proper permission in Azure storage, which can be done in the Access control (IAM) section.
         - Grant the **Storage Blob Data Contributor** role on the ADLSgen2 account to the application ID you just created.
 3.	To avoid the Application ID, Application Key and Tenant ID values from showing up in code, you should use Azure Databricks Secrets. Use [these](https://docs.azuredatabricks.net/user-guide/secrets/index.html#secrets-user-guide) instructions to create a secret scope and secrets for the above values. You can also just paste your credentials into the notebook, but that is not recommended.
-4.	Assign appropriate values to the following variables in the notebook. Values to be replaced is also indicated in the notebook in angle brackets <>
+4.	Assign appropriate values to the following variables in the notebook. Values to be replaced are also indicated in the notebook in angle brackets <>
 
     |Variable| Value to be assigned|
     |--------|---------------------|
-    |inputLocation| Location of the model.json in the input CDM folder. If you are using this notebook as part of an ADF pipeline, populate this from ADF. The values to be replaced in the notebook are **\<adlsgen2accountname\>** and **\<workspacename\>**|
-    |outputLocation	| Location of the output CDM folder. This will be created if it does not exist.  If you are using this notebook as part of an ADF pipeline, populate this from ADF. <br> The values to be replaced in the notebook are  **\<adlsgen2accountname>** and **<workspacename>** <br> <br>  IMPORTANT: It is recommended that the output folder is pre-created if you want to assign specific permissions to the folder and its content. Output data files created within that folder will then inherit those permissions. Not setting permissions first will require you to set the permissions manually file by file. Permissions can be set in Azure Storage Explorer.|
+    |inputLocation| Location of the model.json in the input CDM folder. If you are using this notebook as part of an ADF pipeline, populate this from ADF. The values to be replaced in the notebook are **\<adlsgen2accountname\>** and **\<workspacename>**|
+    |outputLocation	| Location of the output CDM folder. This will be created if it does not exist.  If you are using this notebook as part of an ADF pipeline, populate this from ADF. <br> The values to be replaced in the notebook are  **\<adlsgen2accountname>** and **\<workspacename>** <br> <br>  IMPORTANT: It is recommended that the output folder is pre-created if you want to assign specific permissions to the folder and its content. Output data files created within that folder will then inherit those permissions. Not setting permissions first will require you to set the permissions manually file by file. Permissions can be set in Azure Storage Explorer.|
     | appID	| If you have created a secret scope in Step 3 above, replace  **\<secretscope> ** in the notebook with the scope name you have created. You can also specify the value directly in the notebook that you got from Step 2 above, that is not recommended |
     | appKey | If you have created a secret scope in Step 3 above, replace  **\<secretscope> ** in the notebook with the scope name you have created. You can also specify the value directly in the notebook that you got from Step 2 above, that is not recommended | 
     | tenantID	| If you have created a secret scope in Step 3 above, replace  **\<secretscope>** in the notebook with the scope name you have created. You can also specify the value directly in the notebook that you got from Step 2 above, that is not recommended | 
@@ -320,8 +320,7 @@ First, you need to deploy the Azure function to read the entity definitions from
 3.	Now, you will be taken to the ADF authoring canvas and see that three pipelines have been deployed under your data factory. You should be concerned with the two top-level pipelines.
     - **MountCDM** – reads the loads the data from ADLSGen2 account in CDM folder, creates staging tables in DW, and loads the data  
         i.	**ProcessEntityData** – this child pipeline is invoked if user chooses to load the data into the target DW  
-        ii.	**ProcessEntitySchema** – this child pipeline is invoked if user chooses to create the schema in the DW, which creates a table for each entity in the CDM folder.   
-        > NOTE: in this tutorial, the staging tables are already deployed so the ProcessEntitySchema pipeline will not be run.   
+        ii.	**ProcessEntitySchema** – this child pipeline is invoked if user chooses to create the schema in the DW, which creates a table for each entity in the CDM folder.      
 
 ##### 4.5.1.4	MountCDM Pipeline
 
@@ -333,11 +332,11 @@ The MountCDM pipeline invokes your Databricks notebook, ingests your data from t
 
 |Parameter Name | Description | Default Value |
 |-----------|------------------|----------------------|
-|SourceCdmFolder | Location of the source CDM folder |	https://<adlsgen2accountname>.dfs.core.windows.net/powerbi/<workspacename>/WideWorldImporters-Sales/model.json |
-| PreparedCdmFolder | Location of the output CDM folder in ADLS Gen2 | https://<adlsgen2accountname>.dfs.core.windows.net/powerbi/<workspacename>/WideWorldImporters-Sales-Prep <br> Note: use a different location than the one used in the notebook itself.|
-|CDMFolder | File path of the CDM data in the ADLS Gen 2 account | 	powerbi/<workspacename>/WideWorldImporters-Sales-Prep. This should the same latter file path as your “PreparedCdm” folder from Databricks. |
+|SourceCdmFolder | Location of the source CDM folder |	https://\<adlsgen2accountname>.dfs.core.windows.net/powerbi/\<workspacename>/WideWorldImporters-Sales/model.json |
+| PreparedCdmFolder | Location of the output CDM folder in ADLS Gen2 | https://\<adlsgen2accountname>.dfs.core.windows.net/powerbi/\<workspacename>/WideWorldImporters-Sales-Prep <br> Note: use a different location than the one used in the notebook itself.|
+|CDMFolder | File path of the CDM data in the ADLS Gen 2 account | 	powerbi/\<workspacename>/WideWorldImporters-Sales-Prep. This should the same latter file path as your “PreparedCdm” folder from Databricks. |
 | ModelFile | Name of the model file | model.json |
-|CreateSchema | Create the table schema on the destination for each included CDM Entity. | Mark as false if the target schema has already been created or this will throw an error.	| true |
+|CreateSchema | Create the table schema on the destination for each included CDM Entity. | true <br> Mark as false if the target schema has already been created or this will throw an error.	| true |
 | LoadData | Load data into the destination. (Mark as false if you don’t want the pipeline to load data into the DW) | true |
 | DataTypeMap	| Object that contains a list of datatype mappings between CDM and SQL datatypes.  Adjust for your data.	| { <br>      "String":"nvarchar(350)", <br> "Int64":"int", <br> "DateTime":"datetime", <br> "Boolean":"bit", <br> "Double":"float", <br> "Decimal":"float", <br> "DateTimeOffset":"DateTimeOffset" <br> } |
 |EntitiesInclusionMap | Array of CDM entities you want to copy. If empty, pipeline will load all entities. | [] |
