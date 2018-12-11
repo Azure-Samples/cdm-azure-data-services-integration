@@ -116,7 +116,7 @@ Once you’ve completed the getting started tasks, you’re ready to run the mai
 - **Connect to an operational database and extract sales data into a CDM folder** in ADLS gen 2 using a Power BI dataflow. 
 - **Prepare the data for analytics processing** using Azure Databricks. The prepared data is written to a new CDM folder 
 - **Train and publish a machine learning model** with using Azure Machine Learning 
- - **Load the data into an Azure SQL Data Warehouse** using an Azure Data Factory pipeline 
+- **Load the data into an Azure SQL Data Warehouse** using an Azure Data Factory pipeline 
 - **Orchestrate all the Azure tasks** above using another Azure Data Factory pipeline
 
 Running through the tasks above will take some time, so grab a coffee and buckle-up!
@@ -198,9 +198,8 @@ In this section, you use an Azure Databricks notebook to process the data in the
     - Register an application entity in Azure Active Directory (Azure AD) (details [here](https://docs.microsoft.com/azure/storage/common/storage-auth-aad-app)). This can be an existing web app/api application or you can [create a new one](https://docs.microsoft.com/azure/active-directory/develop/howto-create-service-principal-portal). 
     - Make a note of the application name which you will use when granting permissions to the ADLS Gen2 account.
     - Make note of the following values, which you use to run the notebook sample:  
-
         - **Application ID**  
-        - **Application ke**y (also referred to as **client secret** or **application password**)  
+        - **Application key** (also referred to as **client secret** or **application password**)  
         - [**Tenant ID**](https://docs.microsoft.com/azure/storage/common/storage-auth-aad-app#get-the-tenant-id-for-your-azure-active-directory)
     - Grant the service principal proper permission in Azure storage, which can be done in the Access control (IAM) section.
         - Grant the **Storage Blob Data Contributor** role on the ADLSgen2 account to the application ID you just created.
@@ -243,7 +242,7 @@ To integrate this model into an Azure Machine Learning services flow, from exper
 
 ### 4.4	Use Azure SQL Data Warehouse to create a data mart for the sales data
 
-In this section, you deploy a SQL Data Warehouse with a dimensional data warehouse schema ahead of populating it with data from the CDM folder.  
+In this section, you deploy a SQL Data Warehouse ready to populate it with data from the CDM folder.  
 
 #### 4.4.1	Deploy the data warehouse
 In the Azure portal, navigate to the new SQL Data Warehouse form.  
