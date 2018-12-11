@@ -20,14 +20,7 @@ IMPORTANT: the sample code is provided as-is with no warranties and is intended 
 
 ## Getting Started
 
-See the [tutorial](https://github.com/Azure-Samples/cdm-azure-data-services-integration/blob/master/Tutorial/CDM-Azure-Data-Services-Integration-Tutorial.md) for details.  
-
-### Prerequisites
-See the tutorial for details.
-
-### Installation
-See the tutorial for detailed installation instructions.
-
+See the [tutorial](https://github.com/Azure-Samples/cdm-azure-data-services-integration/blob/master/Tutorial/CDM-Azure-Data-Services-Integration-Tutorial.md) for pre-requisites and installation details.
 
 ## License
 The sample code and tutorials in this project are licensed under the MIT license. See the [LICENSE](https://github.com/Azure-Samples/cdm-azure-data-services-integration/blob/master/LICENSE.md) file for more details.
