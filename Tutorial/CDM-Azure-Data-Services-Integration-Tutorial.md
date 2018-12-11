@@ -7,13 +7,13 @@ Business analysts who use Power BI dataflows can now share data with data engine
 This tutorial walks through use of Common Data Model (CDM) metadata and CDM folders in a modern data warehouse scenario using Azure Data Services.  For more information on the scenario, see this blog post. 
 The tutorial walks through the flows highlighted in green in the diagram below.  Each flow leverages the metadata contained in a CDM folder to make it easier and simpler to accomplish the task. You will:
 
-0.	[Configure Power BI to save Power BI Dataflows as CDM folders in Azure Data Lake Storage Gen2](#34-create-an-adls-gen2-account-and-configure-power-bi-connectivity)
-1.	[Create a Power BI dataflow by ingesting sales data from the Wide World Importers sample database and save it as a CDM folder](#41-create-a-power-bi-dataflow-from-the-wide-world-importersd-database)
-2.	[Use an Azure Databricks notebook to prepare and cleanse the data in the CDM folder, and then write the updated data to a new CDM folder in the data lake](#42-use-azure-databricks-to-prepare-the-data-in-a-new-cdm-folder)
-3.	[Use Azure Machine Learning to train and publish a model using data from the CDM folder](#43-use-machine-learning-to-train-a-machine-learning-model)
-4.	[Use Azure SQL Data Warehouse to create a data warehouse](#44-use-azure-sql-data-warehouse-to-create-a-data-mart-for-the-sales-data)
-5.	[Use Azure Data Factory to orchestrate Databricks data preparation and then load into SQL Data Warehouse](#45-use-azure-data-factory-to-orchestrate-databricks-data-preparation-and-then-loading-the-prepared-data-into-sql-data-warehouse)
-6.	[Deploy the dimensional schema to the DW and transform the staged data](#46-deploy-the-dimensional-schema-to-the-dw-and-transform-the-staged-data)
+0.	[Configure Power BI to save Power BI Dataflows as CDM folders in Azure Data Lake Storage Gen2](#34create-an-adls-gen2-account-and-configure-power-bi-connectivity)
+1.	[Create a Power BI dataflow by ingesting sales data from the Wide World Importers sample database and save it as a CDM folder](#41create-a-power-bi-dataflow-from-the-wide-world-importersd-database)
+2.	[Use an Azure Databricks notebook to prepare and cleanse the data in the CDM folder, and then write the updated data to a new CDM folder in the data lake](#42use-azure-databricks-to-prepare-the-data-in-a-new-cdm-folder)
+3.	[Use Azure Machine Learning to train and publish a model using data from the CDM folder](#43use-machine-learning-to-train-a-machine-learning-model)
+4.	[Use Azure SQL Data Warehouse to create a data warehouse](#44use-azure-sql-data-warehouse-to-create-a-data-mart-for-the-sales-data)
+5.	[Use Azure Data Factory to orchestrate Databricks data preparation and then load into SQL Data Warehouse](#45use-azure-data-factory-to-orchestrate-databricks-data-preparation-and-then-loading-the-prepared-data-into-sql-data-warehouse)
+6.	[Deploy the dimensional schema to the DW and transform the staged data](#46deploy-the-dimensional-schema-to-the-dw-and-transform-the-staged-data)
 
 ![](media/overview.png)
 
