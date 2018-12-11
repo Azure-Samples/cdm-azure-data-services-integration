@@ -203,7 +203,7 @@ In this section, you use an Azure Databricks notebook to process the data in the
         - [**Tenant ID**](https://docs.microsoft.com/azure/storage/common/storage-auth-aad-app#get-the-tenant-id-for-your-azure-active-directory)
     - Grant the service principal proper permission in Azure storage, which can be done in the Access control (IAM) section.
         - Grant the **Storage Blob Data Contributor** role on the ADLSgen2 account to the application ID you just created.
-3.	To avoid the Application ID, Application Key and Tenant ID values from showing up in code, you should use Azure Databricks Secrets. Use [these](https://docs.azuredatabricks.net/user-guide/secrets/index.html#secrets-user-guide) instructions to create a secret scope and secrets for the above values. You can also just paste your credentials into the notebook, but that is not recommended.
+3.	To avoid hardcoding the Application ID, Application Key and Tenant ID values in your notebook, you should use Azure Databricks Secrets. Use [these](https://docs.azuredatabricks.net/user-guide/secrets/index.html#secrets-user-guide) instructions to create a secret scope and secrets for the above values. You can also just paste your credentials into the notebook, but that is not recommended.
 4.	Assign appropriate values to the following variables in the notebook. Values to be replaced are also indicated in the notebook in angle brackets <>
 
     |Variable| Value to be assigned|
