@@ -4,7 +4,7 @@ Tutorial and sample code for integrating Power BI dataflows and Azure Data Servi
 
 ## Features
 
-The [tutorial](https://github.com/Azure-Samples/cdm-azure-data-services-integration/blob/master/Tutorial/CDM-Azure%20Data%20Services%20Integration%20Tutorial.pdf) walks through use of CDM folders in a modern data warehouse scenario.  In it you will:
+The [tutorial](https://github.com/Azure-Samples/cdm-azure-data-services-integration/blob/master/Tutorial/CDM-Azure-Data-Services-Integration-Tutorial.md) walks through use of CDM folders in a modern data warehouse scenario.  In it you will:
 - Configure your Power BI account to save Power BI dataflows as CDM folders in ADLS Gen2;  
 - Create a Power BI dataflow by ingesting order data from the Wide World Importers sample database and save it as a CDM folder;
 - Use an Azure Databricks notebook that prepares and cleanses the data in the CDM folder, and then writes the updated data to a new CDM folder in ADLS Gen2;
@@ -20,7 +20,7 @@ IMPORTANT: the sample code is provided as-is with no warranties and is intended 
 
 ## Getting Started
 
-Download the project and open the tutorial in the tutorial folder.  
+See the [tutorial](https://github.com/Azure-Samples/cdm-azure-data-services-integration/blob/master/Tutorial/CDM-Azure-Data-Services-Integration-Tutorial.md) for details.  
 
 ### Prerequisites
 See the tutorial for details.
