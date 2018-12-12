@@ -67,36 +67,26 @@ Once your ADLS Gen2 account and Power BI are configured correctly, you must crea
 
 ### 3.5	Create the Wide World Importers database
 The tutorial uses data from the Wide World Importers sample database.  You extract sales data from this database using a Power BI dataflow later in the tutorial.
-1.	**Upload the Wide World Importers - Standard bacpac file**
-    
-    Using Azure Storage Explorer or the Azure portal, upload the **WideWorldImporters-Standard.bacpac** file (as BlockBlob if prompted) to the standard Blob storage container created earlier.  The bacpac file is in the …/AzureSqlDatabase/ folder in the downloaded repo.
 
-2.	**Create a logical server**
+1.	**Create a logical server**
 
-    To create a database from a bacpac file, you must first create the logical SQL server that will hold the database.  Later you also create a SQL Data Warehouse on this server.  It is recommended you create a new server for the tutorial.  
+    Create a logical SQL server for the database.  Later you also create a SQL Data Warehouse on this server.  
 
     a. To create an Azure SQL Database server (without a database) using the Azure portal, navigate to a [blank SQL server (logical server)](https://portal.azure.com/#create/Microsoft.SQLServer) form
 
-    b.	Create a server in the same resource group and location as the storage accounts created earlier. 
+    b.	Create the server in the same resource group and location as the storage accounts created earlier. 
+
+2.	**Upload the Wide World Importers - Standard bacpac file**
+    
+    Using Azure Storage Explorer or the Azure portal, upload the **WideWorldImporters-Standard.bacpac** file (as BlockBlob if prompted) to the standard Blob storage container created earlier.  The bacpac file is in the …/AzureSqlDatabase/ folder in the repo.
 
 3.	**Create the database by importing the bacpac file**
     
-    Got to the server page in the Azure portal, 
-
-    a. Click on **Import database** 
-
-    b.	Click on **Storage** and navigate to the **WideWorldImporters-Standard.bacpac** file  
-
-    c.	Change the **Pricing Tier** to **50 DTUs** using the DTUs slider to reduce import time.  
-
-    d.	Enter your server admin password and click **OK**.
-
-
-    > NOTE: When you import a bacpac, a job is submitted to an import service queue.  The job may not run immediately, especially if it is submitted at a busy time.  This step can take several minutes.  
+    On the server page in the portal, import the bacpac file to create the database.  Set the database pricing tier to 200 DTUs or higher to speed up the import. Scale the database down after the import completes to reduce costs.  See [SQL Database Import](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-import).  
 
 4.	**Create a firewall rule on the server**
 
-    To access a SQL Database from outside Azure, for example, from SSMS or Power BI desktop, add a firewall rule to the server to grant access to your client IP address or to a range of IPs.
+    To access the SQL Database from outside Azure, for example, from SSMS or Power BI desktop, add a firewall rule to the server to grant access to your client IP address or to a range of IPs.
 
     a.	On the server page in the Azure portal, use **Firewalls and Virtual Networks**
 
