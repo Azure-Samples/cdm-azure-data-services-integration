@@ -4,7 +4,7 @@ Tutorial and sample code for integrating Power BI Dataflows and Azure Data Servi
 
 ## 1 Introduction
 Business analysts who use Power BI dataflows can now share data with data engineers and data scientists, who can leverage the power of Azure Data Services, including Azure Databricks, Azure Machine Learning, Azure SQL Data Warehouse and Azure Data Factory, for advanced analytics and AI. 
-This tutorial walks through use of Common Data Model (CDM) metadata and CDM folders in a modern data warehouse scenario using Azure Data Services.  For more information on the scenario, see this blog post. 
+This tutorial walks through use of Common Data Model (CDM) metadata and CDM folders in a modern data warehouse scenario using Azure Data Services.  For more information on the scenario, see this [blog post](https://azure.microsoft.com/en-us/blog/power-bi-and-azure-data-services-dismantle-data-silos-and-unlock-insights). 
 The tutorial walks through the flows highlighted in green in the diagram below.  Each flow leverages the metadata contained in a CDM folder to make it easier and simpler to accomplish the task. You will:
 
 0.	[Configure Power BI to save Power BI Dataflows as CDM folders in Azure Data Lake Storage Gen2](#34create-an-adls-gen2-account-and-configure-power-bi-connectivity)

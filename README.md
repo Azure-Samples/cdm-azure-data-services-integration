@@ -1,6 +1,6 @@
 # CDM folders and Azure Data Services integration
 
-Tutorial and sample code for integrating Power BI dataflows and Azure Data Services using Common Data Model (CDM) folders in Azure Data Lake Storage Gen2.
+Tutorial and sample code for integrating Power BI dataflows and Azure Data Services using Common Data Model (CDM) folders in Azure Data Lake Storage Gen2.  For more information on the scenario, see this [blog post](https://azure.microsoft.com/en-us/blog/power-bi-and-azure-data-services-dismantle-data-silos-and-unlock-insights).
 
 ## Features
 
