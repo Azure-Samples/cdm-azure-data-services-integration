@@ -177,22 +177,23 @@ In this section, you use an Azure Databricks notebook to process the data in the
 2.	In the Azure portal, on the Databricks service Overview page, click **Launch Workspace** button  
 3.	[Create](https://docs.azuredatabricks.net/user-guide/clusters/create.html) a cluster within the workspace that you just launched.  
     > IMPORTANT: Create a cluster with the Databricks Runtime Version value to be 4.3 with Apache Spark 2.3.1  
-4.	[Install](https://docs.databricks.com/user-guide/libraries.html#create-a-workspace-library) the Scala library package which helps read and write CDM folders on the cluster that you created. This helper library, built from of the CDM folder python library, brings the power of CDM Folders to Azure Databricks and is used in the sample to read and write CDM folders just like other native Spark data sources. It allows access not only to the data but also the schema metadata that can be used to validate the raw data read from file. The library to install is in the tutorial repo at https://github.com/Azure-Samples/cdm-azure-data-services-integration/tree/master/AzureDatabricks/Library and is called **spark-cdm_2.11-0.2.jar**
+4.	[Install](https://docs.databricks.com/user-guide/libraries.html#create-a-workspace-library) the Scala library package which helps read and write CDM folders on the cluster that you created. This helper library, built from the CDM folder Python library, brings the power of CDM Folders to Azure Databricks and is used in the sample to read and write CDM folders just like other native Spark data sources. It allows access not only to the data but also the schema metadata that can be used to validate the raw data read from file. The library to install is in the tutorial repo at https://github.com/Azure-Samples/cdm-azure-data-services-integration/tree/master/AzureDatabricks/Library and is called **spark-cdm_2.11-0.2.jar**
 
     > IMPORTANT: Restart the cluster after you have created and attached the library.
 
 #### 4.2.2	Use a Databricks notebook to prepare the data
 1.	Import the **read-write-demo-wide-world-importers.py** notebook from the [tutorial repo](https://github.com/Azure-Samples/cdm-azure-data-services-integration/tree/master/AzureDatabricks/Samples) to your workspace folder. The folder location will be Workspace -> Users ->  *your username*.  
-    This notebook does three data preparation steps on the original data and writes the transformed Wide World Importers data to a new CDM folder that can be used as an input by other Azure services
+    This notebook does three data preparation steps on the original customer entity and writes the transformed Wide World Importers data to a new CDM folder that can be used as an input by other Azure services
 2.	Setup the **service principal authentication type** with ADLS Gen2 (note: storage key is not supported as this time). Azure Databricks will use this authentication mechanism to read and write CDM folders from ADLS Gen2. To use service principal authentication, follow these steps:  
     - Register an application entity in Azure Active Directory (Azure AD) (details [here](https://docs.microsoft.com/azure/storage/common/storage-auth-aad-app)). This can be an existing web app/api application or you can [create a new one](https://docs.microsoft.com/azure/active-directory/develop/howto-create-service-principal-portal). 
-    - Make a note of the application name which you will use when granting permissions to the ADLS Gen2 account.
+    - Make a note of the application name which you can use when granting permissions to the ADLS Gen2 account.
     - Make note of the following values, which you use to run the notebook sample:  
+        - **Application Name** (for granting permission to ADLS Gen2)
         - **Application ID**  
         - **Application key** (also referred to as **client secret** or **application password**)  
-        - [**Tenant ID**](https://docs.microsoft.com/azure/storage/common/storage-auth-aad-app#get-the-tenant-id-for-your-azure-active-directory)
+        - [**Directory/Tenant ID**](https://docs.microsoft.com/azure/storage/common/storage-auth-aad-app#get-the-tenant-id-for-your-azure-active-directory)
     - Grant the service principal proper permission in Azure storage, which can be done in the Access control (IAM) section.
-        - Grant the **Storage Blob Data Contributor** role on the ADLSgen2 account to the application ID you just created.
+        - Grant the **Storage Blob Data Contributor** role on the ADLSgen2 account to the application Name or ID you just created.
 3.	To avoid hardcoding the Application ID, Application Key and Tenant ID values in your notebook, you should use Azure Databricks Secrets. Use [these](https://docs.azuredatabricks.net/user-guide/secrets/index.html#secrets-user-guide) instructions to create a secret scope and secrets for the above values. You can also just paste your credentials into the notebook, but that is not recommended.
 4.	Assign appropriate values to the following variables in the notebook. Values to be replaced are also indicated in the notebook in angle brackets <>
 
