@@ -286,8 +286,8 @@ First, you need to deploy the Azure function to read the entity definitions from
 2.	Deploy your Azure Data Factory entities [through a custom template through the Azure portal](https://docs.microsoft.com/azure/azure-resource-manager/resource-group-template-deploy-portal). The custom template for the data factory and entities can be found in the repository. There are two different ARM templates you can deploy:
     - **adf-arm-template-databricks-cdm-to-dw/** - deploy this ARM template for the data factory and pipeline that invokes the Databricks data preparation notebook and then copies data from the prepared CDM folder and loads it into the data warehouse
     - **adf-arm-template-cdm-to-dw/** - deploy this ARM template for the data factory and pipeline that copies data from a CDM folder and loads it into the data warehouse.  NOTE: Only use this template if you have decided not to use Databricks to prepare the data. 
-3.	 The files you will need within the directories are [arm_template.json](https://github.com/Azure-Samples/cdm-azure-data-services-integration/tree/master/AzureDataFactory/sample-azure-function) and [arm_template_parameters.json](https://github.com/Azure-Samples/cdm-azure-data-services-integration/tree/master/AzureDataFactory/sample-azure-function).  <br> <br>
-    While deploying the template in the Azure portal, you will be asked fill in the following values for **arm_template_parameter.json**.
+3.	 The files you will need within the directories are [arm_template.json](https://github.com/Azure-Samples/cdm-azure-data-services-integration/tree/master/AzureDataFactory) and [arm_template_parameters.json](https://github.com/Azure-Samples/cdm-azure-data-services-integration/tree/master/AzureDataFactory).  <br> <br>
+    While deploying the template in the Azure portal, you will be asked fill in the following values for **arm_template_parameter.json**. To track the results of the deployment, open the resource group blade the ARM template was deployed to, and open the Deployments blade.
 
 | Parameter | Value to be assigned |
 |-----------|----------------------|
@@ -304,7 +304,7 @@ First, you need to deploy the Azure function to read the entity definitions from
 1.	Open the Azure Data Factory in the Azure Portal. Click on **Author & Monitor**.
     ![](media/authormonitor.png)    
 
-2.	Once in the ADF UX experience, click on the **Authoring** icon
+2.	Once in the ADF UX experience, click on the **Author** icon
     ![](media/adfauthor.png)    
  
 3.	Now, you will be taken to the ADF authoring canvas and see that three pipelines have been deployed under your data factory. You should be concerned with the two top-level pipelines.
