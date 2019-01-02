@@ -287,7 +287,7 @@ First, you need to deploy the Azure function to read the entity definitions from
     - **adf-arm-template-databricks-cdm-to-dw/** - deploy this ARM template for the data factory and pipeline that invokes the Databricks data preparation notebook and then copies data from the prepared CDM folder and loads it into the data warehouse
     - **adf-arm-template-cdm-to-dw/** - deploy this ARM template for the data factory and pipeline that copies data from a CDM folder and loads it into the data warehouse.  NOTE: Only use this template if you have decided not to use Databricks to prepare the data. 
 3.	 The files you will need within the directories are [arm_template.json](https://github.com/Azure-Samples/cdm-azure-data-services-integration/tree/master/AzureDataFactory) and [arm_template_parameters.json](https://github.com/Azure-Samples/cdm-azure-data-services-integration/tree/master/AzureDataFactory).  <br> <br>
-    While deploying the template in the Azure portal, you will be asked fill in the following values for **arm_template_parameter.json**. To track the results of the deployment, open the resource group blade the ARM template was deployed to, and open the Deployments blade.
+    While deploying the template in the Azure portal, you will be asked fill in the following values for **arm_template_parameter.json**. You can load the parameters file (Edit parameters), or you can just fill in the parameters the ARM template stated. To track the results of the deployment, open the resource group blade the ARM template was deployed to, and open the Deployments blade.
 
 | Parameter | Value to be assigned |
 |-----------|----------------------|
@@ -316,7 +316,7 @@ First, you need to deploy the Azure function to read the entity definitions from
 
 ![](media/mountcdmpipeline.png)
  
-The CDMPreptoDW pipeline invokes your Databricks notebook, ingests your data from the CDM folder, creates the target schema in the DW, and lands the data.  When running the pipeline, you will see that there are parameters to the pipeline with default values being passed. You can adjust these values depending on your scenario:
+The CDMPreptoDW pipeline invokes your Databricks notebook, ingests your data from the CDM folder, creates the target schema in the DW, and lands the data.  When running the pipeline, you will see that there are parameters to the pipeline with default values being passed. You can adjust these values depending on your scenario. This is the pipeline for the CDMPreptoDW that invokes tyhe Databricks data preparation notebook as well. If you deployed the data factory that does not invoke databricks, you will just not have the "PrepareData" activity.
 
 ![](media/pipelineparameters.png)
 
