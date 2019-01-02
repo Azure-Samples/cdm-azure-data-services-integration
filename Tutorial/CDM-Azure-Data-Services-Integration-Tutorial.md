@@ -316,7 +316,7 @@ First, you need to deploy the Azure function to read the entity definitions from
 
 ![](media/mountcdmpipeline.png)
  
-The CDMPreptoDW pipeline invokes your Databricks notebook, ingests your data from the CDM folder, creates the target schema in the DW, and lands the data.  When running the pipeline, you will see that there are parameters to the pipeline with default values being passed. You can adjust these values depending on your scenario. This is the pipeline for the CDMPreptoDW that invokes tyhe Databricks data preparation notebook as well. If you deployed the data factory that does not invoke databricks, you will just not have the "PrepareData" activity.
+The CDMPreptoDW pipeline invokes your Databricks notebook, ingests your data from the CDM folder, creates the target schema in the DW, and lands the data.  When running the pipeline, you will see that there are parameters to the pipeline with default values being passed. You can adjust these values depending on your scenario. This is the pipeline for the CDMPreptoDW that invokes the Databricks data preparation notebook as well. If you deployed the data factory that does not invoke databricks, you will just not have the "PrepareData" activity.
 
 ![](media/pipelineparameters.png)
 
