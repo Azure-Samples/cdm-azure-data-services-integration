@@ -50,7 +50,7 @@ Clone or download the repo to your local machine so you have access to these fil
 ### 3.2	Create an Azure resource group
 It’s recommended that you create a new Azure resource group and use it for all Azure resources created in the tutorial.  When you finish the tutorial, delete this resource group to delete all resources.  
 
-> Note: create Azure resources in the same location as your Power BI tenant.  See, [Where is my Power BI tenant located?](https://docs.microsoft.com/power-bi/service-admin-where-is-my-tenant-located)
+> NOTE: create Azure resources in the same location as your Power BI tenant.  See, [Where is my Power BI tenant located?](https://docs.microsoft.com/power-bi/service-admin-where-is-my-tenant-located)
 
 ### 3.3	Create a standard storage account and container for uploading files
 For uploading files used in the tutorial, create a standard (not premium) storage account. This must be a regular storage account, separate from the ADLS Gen2 account.  Do not enable the hierarchical name space on this account. Once created, add a Blob container into which you will upload files.
@@ -194,15 +194,16 @@ In this section, you use an Azure Databricks notebook to process the data in the
         - [**Directory/Tenant ID**](https://docs.microsoft.com/azure/storage/common/storage-auth-aad-app#get-the-tenant-id-for-your-azure-active-directory)
     - Grant the service principal proper permission in Azure storage, which can be done in the Access control (IAM) section.
         - Grant the **Storage Blob Data Contributor** role on the ADLSgen2 account to the application Name or ID you just created.
-3.	To avoid hardcoding the Application ID, Application Key and Tenant ID values in your notebook, you should use Azure Databricks Secrets. Use [these](https://docs.azuredatabricks.net/user-guide/secrets/index.html#secrets-user-guide) instructions to create a secret scope and secrets for the above values. You can also just paste your credentials into the notebook, but that is not recommended.
-4.	Assign appropriate values to the following variables in the notebook. Values to be replaced are also indicated in the notebook in angle brackets <>
+        >NOTE: You need owner permissions on the ADLS Gen2 storage account to do this. 
+3.	To avoid hardcoding the Application ID, Application Key and Tenant ID values in your notebook, you should use Azure Databricks Secrets. Use [these](https://docs.azuredatabricks.net/user-guide/secrets/index.html#secrets-user-guide) instructions to create a secret scope (an Azure Key Vault) and secrets for the above values. You can also just paste your credentials into the notebook, but that is not recommended.
+4.	Assign appropriate values to the following variables in the notebook. Values to be replaced are also indicated in the notebook in angle brackets <>.
 
     |Variable| Value to be assigned|
     |--------|---------------------|
     |inputLocation| Location of the model.json in the input CDM folder. If you are using this notebook as part of an ADF pipeline, populate this from ADF. The values to be replaced in the notebook are **\<adlsgen2accountname\>** and **\<workspacename>**|
-    |outputLocation	| Location of the output CDM folder. This will be created if it does not exist.  If you are using this notebook as part of an ADF pipeline, populate this from ADF. <br> The values to be replaced in the notebook are  **\<adlsgen2accountname>** and **\<workspacename>** <br> <br>  IMPORTANT: It is recommended that the output folder is pre-created if you want to assign specific permissions to the folder and its content. Output data files created within that folder will then inherit those permissions. Not setting permissions first will require you to set the permissions manually file by file. Permissions can be set in Azure Storage Explorer.|
-    | appID	| If you have created a secret scope in Step 3 above, replace  **\<secretscope> ** in the notebook with the scope name you have created. You can also specify the value directly in the notebook that you got from Step 2 above, that is not recommended |
-    | appKey | If you have created a secret scope in Step 3 above, replace  **\<secretscope> ** in the notebook with the scope name you have created. You can also specify the value directly in the notebook that you got from Step 2 above, that is not recommended | 
+    |outputLocation	| Location of the output CDM folder. This will be created if it does not exist.  If you are using this notebook as part of an ADF pipeline, populate this from ADF. <br> The values to be replaced in the notebook are  **\<adlsgen2accountname>** and **\<workspacename>** <br> <br>  IMPORTANT: It is recommended that the output folder is pre-created if you want to assign specific permissions (POSIX ACLs) to the folder and its content. Output data files created within that folder will then inherit those permissions. Not setting permissions first will require you to set the permissions manually file by file. Permissions can be set in Azure Storage Explorer.|
+    | appID	| If you have created a secret scope in Step 3 above, replace  **\<secretscope>** in the notebook with the scope name you have created. You can also specify the value directly in the notebook that you got from Step 2 above, that is not recommended |
+    | appKey | If you have created a secret scope in Step 3 above, replace  **\<secretscope>** in the notebook with the scope name you have created. You can also specify the value directly in the notebook that you got from Step 2 above, that is not recommended | 
     | tenantID	| If you have created a secret scope in Step 3 above, replace  **\<secretscope>** in the notebook with the scope name you have created. You can also specify the value directly in the notebook that you got from Step 2 above, that is not recommended | 
 
 5.	Run All cells in the notebook toolbar. 
@@ -224,7 +225,7 @@ In the sample there are a series of helper methods that use this library to make
 
 #### 4.3.2	Train and publish the machine learning model using data from the CDM folder
 
-Using the **cdm-customer-classification-demo.ipynb** notebook file, load and execute the notebook via a local/remote Jupyter installation or a notebooks.azure.com account. This notebook focuses on some of the unique value when using CDM data in a model.
+Using the **cdm-customer-classification-demo.ipynb** notebook file, load and execute the notebook via a local/remote Jupyter installation or a [notebooks.azure.com](https://notebooks.azure.com) account. This notebook focuses on some of the unique value when using CDM data in a model.
 
 #### 4.3.3	Integrate into Azure Machine Learning services
 In the previous step the ML model is trained but not operationalized/deployed and makes no use of Azure Machine Learning services for experimentation management or deployment. To learn how do to do this complete the below tutorial to understand the steps involved in using these capabilities and then apply the learning/skills to the CDM sample notebook from 4.3.2.
@@ -254,19 +255,21 @@ The pipeline shown above:
 - Creates and then loads tables in SQL Data Warehouse using the CDM folder created by Databricks notebook.
 To invoke the Azure Machine Learning notebook with the location of the prepared CDM folder, you can invoke any custom endpoint with a [Web Activity in ADF](https://docs.microsoft.com/azure/data-factory/control-flow-web-activity) added to the pipeline.
 
+If you are not using Databricks, an alternate pipeline template is provided that omits the PrepareData activity.  
+
 #### 4.5.1	Use Azure Data Factory to create and load staging tables from a CDM folder 
-In this section, using the data in the new CDM Folder, you create and load staging tables in the SQL Data Warehouse you created earlier.  This process is orchestrated by a sample ADF pipeline, which uses custom activities, implemented as serverless Azure Functions, to read the entity definitions from the model.json file in the CDM folder and generate the T-SQL script for creating the staging tables, and then maps the entity data to these tables.  Generating the schema and loading the data are both optional, so you can choose how best to use the pipeline during development and runtime scenarios.  
+In this section, using the CDM Folder, you create and load staging tables in the SQL Data Warehouse you created earlier.  This process is orchestrated by an ADF pipeline, which uses custom activities, implemented as serverless Azure Functions, to read the entity definitions from the model.json file in the CDM folder and generate the T-SQL script for creating the staging tables, and then maps the entity data to these tables.  Generating the schema and loading the data are both optional, so you can choose how best to use the pipeline during development and runtime scenarios.  
 
 ##### 4.5.1.1	Deploy an Azure function to be used in the data factory 
 First, you need to deploy the Azure function to read the entity definitions from the model.json file and generate the scripts to create the staging tables. 
-1.	Download the folder [arm-template-azure-function-app](https://github.com/Azure-Samples/cdm-azure-data-services-integration/tree/master/AzureDataFactory/arm-template-azure-function-app).
+1.	Download the folder [arm-template-azure-function-app](https://github.com/Azure-Samples/cdm-azure-data-services-integration/tree/master/AzureDataFactory/arm-template-azure-function-app)
 2.	You will need to [deploy a function app](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy) with Azure PowerShell to host the execution of your functions. To do so, first edit the file **“parameters.json”** in the downloaded folder with appropriate values.
 
 | Parameter | Value to be assigned |
 |-----------|----------------------|
 |`sites_cdmparser_name`|	Globally unique name that identifies your new function app. Valid characters are a-z, 0-9, and -.|
 |`serverfarms_cdmparserPlan_name`|	The Azure function app runs on an [App Service Plan](https://docs.microsoft.com/azure/azure-functions/functions-scale#app-service-plan). This is a unique name for the name of your app service plan.|
-|`storageAccounts_cdmparserstorage_name` |	Name of the storage account used by your function app. You can create a new one or use an existing one.|
+|`storageAccounts_cdmparserstorage_name` |	Name of the blob storage account used by your function app. You can create a new one or use an existing one.  Do not use an ADLS Gen2 account.|
 |`hostNameBindings_cdmparser.azurewebsites.net_name` |	This will be in format of `"<sites_cdmparser_name>.azurewebsites.net"` where the first part of the URL is the value of the first parameter value you specified for `"sites_cdm_parser_name"` |
 
 3.	Execute “deploy.ps1” with PowerShell. You will need to provide the Resource Group name you wish to deploy the application. You should see the following in your resource group if you correctly deployed the Azure Function app.
@@ -293,7 +296,7 @@ First, you need to deploy the Azure function to read the entity definitions from
 |-----------|----------------------|
 |`factoryName` |	The name of your ADFV2 data factory you deployed.|
 |`ADLSGen2_accountKey`	| Account key for the Data Lake Storage Gen2 service you created in step 3.4. |
-|`AzureStorage_connectionString` |	Reference the storage connection string you created in step 3.3.|
+|`AzureStorage_connectionString` |	Reference the standard blob storage connection string you created in step 3.3.|
 |`AzureSqlDW_connectionString` |	Reference the DW connection string you created in step 4.4.1.|
 |`ADLSGen2_properties_typeProperties_url` |	Endpoint for the Data Lake Storage Gen2 with the pattern of `https://<accountname>.dfs.core.windows.net` you created in step 3.4|
 |`CDMParserUrl` |	This is the URL of your Azure Function app you created in 4.5.1.|
@@ -316,7 +319,13 @@ First, you need to deploy the Azure function to read the entity definitions from
 
 ![](media/mountcdmpipeline.png)
  
-The CDMPreptoDW pipeline invokes your Databricks notebook, ingests your data from the CDM folder, creates the target schema in the DW, and lands the data.  When running the pipeline, you will see that there are parameters to the pipeline with default values being passed. You can adjust these values depending on your scenario. This is the pipeline for the CDMPreptoDW that invokes the Databricks data preparation notebook as well. If you deployed the data factory that does not invoke databricks, you will just not have the "PrepareData" activity.
+The CDMPrepToDW pipeline invokes your Databricks notebook, ingests your data from the CDM folder, creates the target schema in the DW, and lands the data.  
+
+Before you run the pipeline, modify the Databricks connection/linked service and confiure it to use the interactive cluster you tested the notebook with earlier.  To do that you will need to provide the Domain/Region and the access token you created earlier. 
+
+You will also need to modify the pipeline parameters. You can set these values depending on your scenario.  You can modify these in the pipeline definition or when you run the pipeline.
+
+>NOTE: The CDMPrepToDW pipeline shown invokes the Databricks data preparation notebook and then loads the data from the prepared CDM folder. If you deployed the pipeline template that doesn't invoke Databricks, the "PrepareData" activity will not be present.
 
 ![](media/pipelineparameters.png)
 
@@ -325,14 +334,17 @@ The CDMPreptoDW pipeline invokes your Databricks notebook, ingests your data fro
 |SourceCdmFolder | Location of the source CDM folder (this is for the pipeline that invokes Databricks) |	https://\<adlsgen2accountname>.dfs.core.windows.net/powerbi/\<workspacename>/WideWorldImporters-Sales/model.json |
 | PreparedCdmFolder | Location of the output CDM folder in ADLS Gen2 (this is for the pipeline that invokes Databricks) | https://\<adlsgen2accountname>.dfs.core.windows.net/powerbi/\<workspacename>/WideWorldImporters-Sales-Prep <br> Note: use a different location than the one used in the notebook itself.|
 |CDMFolder | File path of the CDM data in the ADLS Gen 2 account | 	powerbi/\<workspacename>/WideWorldImporters-Sales-Prep. This should be the same latter file path as your “PreparedCdmFolder" parameter from Databricks. |
-| ModelFile | Name of the model file | model.json |
+|NotebookPath|Location of the Databricks notebook|/Users/\<user\>@\<tenant\>/read-write-demo-wide-world-importers|
+|ModelFile | Name of the model file | model.json |
 |CreateSchema | Create the table schema on the destination for each included CDM Entity. | true <br> Mark as false if the target schema has already been created or this will throw an error.	| true |
 | LoadData | Load data into the destination. (Mark as false if you don’t want the pipeline to load data into the DW) | true |
 | DataTypeMap	| Object that contains a list of datatype mappings between CDM and SQL datatypes.  Adjust for your data.	| { <br>      "String":"nvarchar(350)", <br> "Int64":"int", <br> "DateTime":"datetime", <br> "Boolean":"bit", <br> "Double":"float", <br> "Decimal":"float", <br> "DateTimeOffset":"DateTimeOffset" <br> } |
 |EntitiesInclusionMap | Array of CDM entities you want to copy. If empty, pipeline will load all entities. | [] |
 | EntitiesExclusionMap | Array of CDM entities you want to exclude from copy. If empty, pipeline will load all entities. | [] | 
 
-Once the ADF pipeline has completed, inspect the data warehouse using SSMS.  You should see the eight staging tables, each of which is populated with data. 
+With all the parameters provided, run the pipeline and monitor its progress in ADF. 
+
+Once the pipeline has completed, inspect the data warehouse using SSMS.  You should see the eight staging tables, each of which is populated with data. 
 
 ### 4.6	Deploy the dimensional schema to the DW and transform the staged data
 
@@ -354,7 +366,7 @@ Review the SQL file to see the patterns used.
 
 #### 4.6.2	Execute the transform procedures to populate the dimensional model
 Execute the transform procedures to populate the dimension and fact tables.  
-1.	In SSMS, run the following statement: `EXEC spTransformWideWorldImporters -Orders`
+1.	In SSMS, run the following statement: `EXEC spTransformWideWorldImporters-Sales`
 
 This procedure invokes transform procedures for each dimension table and then the fact table.  Review the SQL for each procedure to see the patterns used. 
 
@@ -362,8 +374,10 @@ This procedure invokes transform procedures for each dimension table and then th
 
 At this point you have transformed the data in the staging tables and can now explore the dimensional model in the data warehouse.  The data in the data warehouse is consistent with the data extracted from the original Wide World Importers database using Power BI dataflows and prepared by Databricks.  
 
-## 5	Conclusion
-Congratulations if you made it to the end. The tutorial is intended to give you a first look at how to use CDM folders to share data between Power BI and Azure Data Services.  The samples provided with this tutorial are intended only to let you explore the scenario and should not be used in production applications. Please use the "issues" feature in this GitHub repo to share feedback, questions or issues.
+## 6	Conclusion
+Congratulations if you made it to the end! In a real world scenario you would want to set up a schedule for refreshing the Power BI dataflow and a comparable schedule in ADF to prepare and load the refreshed data into the data warehouse (without creating the staging table schema).  
+
+This tutorial provides a first look at how to use CDM folders to share data between Power BI and Azure Data Services.  The samples provided with this tutorial are intended to let you begin to explore the scenario and should not be used in production applications. Please use the "issues" feature in this GitHub repo to share feedback, questions, or issues.
 
 ## 6	Additional Resources
 To learn more about Power BI dataflows, CDM, and Azure Data Services, follow the links below:
