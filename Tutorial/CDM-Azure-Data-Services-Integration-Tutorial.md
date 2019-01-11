@@ -31,7 +31,7 @@ Before you get started you need the following:
 
 
 You should also download and install the following tools which will help you inspect and use resources created in the tutorial.
-- [Azure Storage Explorer](https://azure.microsoft.com/features/storage-explorer/). v1.6 or above supports Azure Data Lake Storage Gen 2.  
+- [Azure Storage Explorer](https://azure.microsoft.com/features/storage-explorer/). v1.6.2 or above supports Azure Data Lake Storage Gen 2 and required permissions settings.  
 - [SQL Server Management Studio (SSMS)](https://docs.microsoft.com/sql/ssms/sql-server-management-studio-ssms?view=sql-server-2017) or [Azure Data Studio](https://docs.microsoft.com/sql/azure-data-studio/) or your preferred SQL development tool.   
 
 ## 3 Getting Started
