@@ -177,7 +177,9 @@ In this section, you use an Azure Databricks notebook to process the data in the
 2.	In the Azure portal, on the Databricks service Overview page, click **Launch Workspace** button  
 3.	[Create](https://docs.azuredatabricks.net/user-guide/clusters/create.html) a cluster within the workspace that you just launched.  
     > IMPORTANT: Create a cluster with the Databricks Runtime Version value to be 4.3 with Apache Spark 2.3.1  
-4.	[Install](https://docs.databricks.com/user-guide/libraries.html#create-a-workspace-library) the Scala library package which helps read and write CDM folders on the cluster that you created. This helper library, built from the CDM folder Python library, brings the power of CDM Folders to Azure Databricks and is used in the sample to read and write CDM folders just like other native Spark data sources. It allows access not only to the data but also the schema metadata that can be used to validate the raw data read from file. The library to install is in the tutorial repo at https://github.com/Azure-Samples/cdm-azure-data-services-integration/tree/master/AzureDatabricks/Library and is called **spark-cdm_2.11-0.2.jar**
+4.	[Install](https://docs.databricks.com/user-guide/libraries.html#create-a-workspace-library) the Scala library package which helps read and write CDM folders on the cluster that you created. This helper library, built from the CDM folder Python library, brings the power of CDM Folders to Azure Databricks and is used in the sample to read and write CDM folders just like other native Spark data sources. It allows access not only to the data but also the schema metadata that can be used to validate the raw data read from file. The library to install is in the tutorial repo at https://github.com/Azure-Samples/cdm-azure-data-services-integration/tree/master/AzureDatabricks/Library and is called **spark-cdm_2.11-0.2.jar**.
+
+    Source code for this library can be found here: https://github.com/Azure/spark-cdm
 
     > IMPORTANT: Restart the cluster after you have created and attached the library.
 
