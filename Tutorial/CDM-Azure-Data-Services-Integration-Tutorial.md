@@ -128,7 +128,7 @@ With this task you create a Power BI dataflow to ingest sales data from the Wide
 6.	Enter the **Server** name (<server>.database.windows.net) and the **Database** name (WideWorldImporters-Standard), and enter the server admin credentials you provided earlier. 
 7.	Select the tables to be extracted:  
     a.	Enter **“Sales”** in the search bar to filter the list to the tables in the Sales schema.  
-    b.	Select **Sales.BuyingGroups, Sales.CustomerCategories, Sales.Customers, Sales.OrderLines, Sales.Orders**  
+    b.	Select **Sales.BuyingGroups, Sales.CustomerCategories, Sales.Customers, Sales.OrderLines, Sales.Orders, Sales.Invoices, Sales.InvoiceLines**  
 
     ![](media/selecttables.png) 
 
