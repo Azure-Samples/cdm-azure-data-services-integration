@@ -3,10 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "factoryName": {
-            "value": "adfcdmtosqldw"
-        },
-        "ADLSGen2_accountKey": {
-            "value": ""
+            "value": "CdmToSqlDw"
         },
         "AzureStorage_connectionString": {
             "value": ""
@@ -15,6 +12,9 @@
             "value": ""
         },
         "ADLSGen2_url": {
+            "value": ""
+        },
+        "ADLSGen2_accountKey": {
             "value": ""
         }
     }
