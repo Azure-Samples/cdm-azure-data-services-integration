@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "factoryName": {
-            "value": "adfcdmwithbricks"
+            "value": "adfcdmtosqldw"
         },
         "ADLSGen2_accountKey": {
             "value": ""
