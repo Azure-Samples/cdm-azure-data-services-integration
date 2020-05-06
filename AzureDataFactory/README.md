@@ -1,3 +1,12 @@
+
+# OBSOLETE
+
+For information on how to use Azure Data Factory mapping data flows to read and write CDM entity data, see [Using ADF Mapping Data Flows with CDM.pdf](https://github.com/Azure-Samples/cdm-azure-data-services-integration/blob/master/Using%20ADF%20Mapping%20Data%20Flows%20with%20CDM.pdf)
+
+---
+
+
+
 # Use Azure Data Factory to load data from a CDM folder into SQL Data Warehouse
 
 This directory contains the usage details, samples and library to orchestrate your entire workflow with an Azure Data Factory pipeline.

@@ -10,6 +10,16 @@ products:
 description: "Tutorial and sample code for integrating Power BI dataflows and Azure Data Services using Common Data Model folders in Azure Data Lake."
 ---
 
+# OBSOLETE
+
+The technology used in this tutorial is now obsolete.  
+
+For information on using Azure Data Factory mapping data flows to read and write CDM entity data, see [Using ADF Mapping Data Flows with CDM.pdf](https://github.com/Azure-Samples/cdm-azure-data-services-integration/blob/master/Using%20ADF%20Mapping%20Data%20Flows%20with%20CDM.pdf)
+
+For information on the new Spark CDM Connector for use in Azure Databricks and Synapse to read and write CDM entity data, see [https://github.com/Azure/spark-cdm-connector](https://github.com/Azure/spark-cdm-connector)
+
+# OBSOLETE
+
 # CDM folders and Azure Data Services integration
 
 Tutorial and sample code for integrating Power BI dataflows and Azure Data Services using Common Data Model (CDM) folders in Azure Data Lake Storage Gen2.  For more information on the scenario, see this [blog post](https://azure.microsoft.com/en-us/blog/power-bi-and-azure-data-services-dismantle-data-silos-and-unlock-insights).
