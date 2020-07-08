@@ -14,7 +14,7 @@ description: "Tutorial and sample code for integrating Power BI dataflows and Az
 
 The technology used in this tutorial is now obsolete.  
 
-For information on using Azure Data Factory mapping data flows to read and write CDM entity data, see [Using ADF Mapping Data Flows with CDM.pdf](https://github.com/Azure-Samples/cdm-azure-data-services-integration/blob/master/Using%20ADF%20Mapping%20Data%20Flows%20with%20CDM.pdf)
+For information on using Azure Data Factory mapping data flows to read and write CDM entity data, see this [blog post](https://techcommunity.microsoft.com/t5/azure-data-factory/adf-adds-support-for-inline-datasets-and-common-data-model-to/bc-p/1469606), which describes the overall solution, with links to an article describing how [CDM support uses inline datasets](https://docs.microsoft.com/en-us/azure/data-factory/data-flow-source), and an article providing details of the [source and sink properties](https://docs.microsoft.com/en-us/azure/data-factory/format-common-data-model).
 
 For information on the new Spark CDM Connector for use in Azure Databricks and Synapse to read and write CDM entity data, see [https://github.com/Azure/spark-cdm-connector](https://github.com/Azure/spark-cdm-connector)
 
